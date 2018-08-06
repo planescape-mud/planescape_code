@@ -1477,7 +1477,7 @@ void nanny(struct descriptor_data *d, char *arg)
                     STATE(d) = CON_CLOSE;
                     return;
                 }
-                if (d->character->registry_code) {
+                if (mud->modRegistration && d->character->registry_code) {
                     SEND_TO_Q("Код регистрации:\r\n", d);
                     STATE(d) = CON_ENTER_REG;
                     return;
@@ -1886,15 +1886,17 @@ void nanny(struct descriptor_data *d, char *arg)
 
                 init_char(d->character);
                 email.assign(d->character);
-                RegistrationCode().assign(d->character);
+                if (mud->modRegistration) 
+                    RegistrationCode().assign(d->character);
                 save_char(d->character, NOWHERE);
                 save_player_index();
             }
 
-            if (!RegistrationFile(d->character).write()) {
-                STATE(d) = CON_CLOSE;
-                return;
-            }
+            if (mud->modRegistration)
+                if (!RegistrationFile(d->character).write()) {
+                    STATE(d) = CON_CLOSE;
+                    return;
+                }
 
             sprintf(buf, "%s [%s] - Новый игрок,  %s.\r\nE-mail: %s",
                     GET_NAME(d->character), d->host,

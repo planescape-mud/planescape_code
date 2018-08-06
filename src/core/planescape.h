@@ -63,6 +63,7 @@ public:
     XML_VARIABLE XMLBooleanOption<true>  modQuietLoad;  /* no extra boot messages */
     XML_VARIABLE XMLIntegerOption<0>     modRestrict;   /* min level allowed to enter the game */
     XML_VARIABLE XMLBooleanOption<false> modNoSpecials; /* suppress assignment of special routines */
+    XML_VARIABLE XMLBooleanOption<false> modRegistration; /* player registration by email enabled */
     XML_VARIABLE XMLStringOption         shareDir;      /* dir used for data loading */
     XML_VARIABLE XMLStringOption         logPattern;    /* log file name (with date patterns) */
     XML_VARIABLE XMLIntegerOption<0>     port;          /* game server port */

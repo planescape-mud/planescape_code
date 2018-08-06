@@ -2,6 +2,7 @@
 <PlaneScape>
     <basePath>.</basePath>
     <baseAbsolute>false</baseAbsolute>
+    <modRegistration>false</modRegistration>
 
     <libexecDir>libexec</libexecDir>
 
