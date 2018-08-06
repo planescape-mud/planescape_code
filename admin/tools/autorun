@@ -1,0 +1,169 @@
+#!/bin/sh
+#
+# CircleMUD autorun script
+# Contributions by Fred Merkel, Stuart Lamble, and Jeremy Elson
+# New log rotating code contributed by Peter Ajamian
+# Copyright (c) 1996 The Trustees of The Johns Hopkins University
+# All Rights Reserved
+# See license.doc for more information
+#
+#############################################################################
+#
+# This script can be used to run Planescape MUD over and over again (i.e., have it
+# automatically reboot if it crashes). 
+# 
+# You can control the operation of this script by creating and deleting files
+# in Planescape's var/run directory, either manually or by using the 'shutdown'
+# command from within the MUD.
+#
+# If you want a quick reboot, use the "shutdown reboot" command from within the MUD.
+#
+# Creating a file called killscript makes the script terminate (i.e., stop
+# rebooting the MUD).  If you want to shut down the MUD and make it stay
+# shut down, use the "shutdown die" command from within the MUD.
+#
+# Finally, if a file called pause exists, the script will not reboot the MUD
+# again until pause is removed.  This is useful if you want to turn the MUD
+# off for a couple of minutes and then bring it back up without killing the
+# script.  Type "shutdown pause" from within the MUD to activate this feature.
+#
+
+# PlaneScape runtime dir
+DIR=/home/psmud/git/runtime
+# PlaneScape binary
+BIN=bin/planescape
+
+# Files created by the "shutdown die" and "shutdown pause" commands.
+KILLSCRIPT_FILE=var/run/killscript
+PAUSE_FILE=var/run/pause
+
+# Current timestamp and date
+DATE=`date`
+TIMESTAMP=`date "+%Y%m%d-%H%M%S"`
+
+# This file will contain the pid of the autorun script
+SCRIPT_PIDFILE=var/run/autorun.pid
+# This file will contain the pid of the MUD 
+MUD_PIDFILE=var/run/ps.pid
+
+# Core file name, as created by the system
+CORE=core
+# Max number of coredumps to keep, files above this limit will be deleted,
+# starting from the oldest ones
+MAXCORES=10
+
+# Default config file to pass as a MUD server argument. Contains all of the settings.
+CONFIG='etc/planescape.xml'
+
+# Default flags to pass to the MUD server (see 'planescape --help' output for 
+# the list of flags). These flags override the defaults from etc/planescape.xml.
+FLAGS=''
+
+
+#############################################################################
+
+#############
+# Functions #
+#############
+
+
+# This function will rotate coredump files 
+proc_coredump () {
+    if [ -r $CORE ]; then
+        mv $CORE $CORE.$TIMESTAMP
+        echo "$DATE: COREDUMP $CORE.$TIMESTAMP" >> syslog
+        ls -t .* | tail +$MAXCORES | xargs rm -f
+    fi
+}
+
+# Cleanup pidfiles and exit
+clean_exit () {
+    rm -f $MUD_PIDFILE $SCRIPT_PIDFILE
+    exit
+}
+
+# This function checks if pid contained within pidfile is still valid,
+# if yes - the script will terminate.
+check_pid () {
+    pidfile=$1
+    progname=`basename $2`
+
+    if (test -e $pidfile); then
+        pid=`cat $pidfile`
+        if (ps -p $pid | grep -q $progname); then
+            echo "$DATE: $progname is already running with pid $pid"
+            exit
+        fi
+
+        echo "$DATE: Unclean $progname shutdown detected: $pidfile is invalid"
+        rm -f $pidfile
+    fi
+}
+
+# Save pid into the file
+save_pid () {
+    pidfile=$1
+    pid=$2
+
+    echo $pid > $pidfile
+    if [ ! -r $pidfile ]; then
+        echo "$DATE: Unable to write $pidfile, something bad happens!"
+        clean_exit
+    fi
+}
+
+
+########
+# Main #
+########
+
+cd $DIR
+
+# See if the script or the MUD are already running
+check_pid $SCRIPT_PIDFILE $0
+check_pid $MUD_PIDFILE $BIN
+
+# If the script was killed or paused, don't try to restart it over 
+if [ -r $KILLSCRIPT_FILE ]; then
+    echo "$DATE: Startup in progress or autorun was killed: remove $KILLSCRIPT_FILE file to proceed"
+    clean_exit 
+fi
+
+if [ -r $PAUSE_FILE ]; then
+   echo "$DATE: The game was paused, remove $PAUSE_FILE file to proceed"
+   clean_exit
+fi
+
+# Save the script pid
+save_pid $SCRIPT_PIDFILE $$
+
+
+# The main loop
+while ( : ) do
+
+  DATE=`date`
+  echo "$DATE: autorun starting game" >> syslog
+  echo "$DATE: running $BIN $FLAGS $PORT" >> syslog
+
+  # On Cygwin, you may need to precede this next line with './' for
+  # './bin/circle' as the command.
+  $BIN $CONFIG $FLAGS &
+  # Save the MUD pid and wait until it terminate
+  save_pid $MUD_PIDFILE $!
+  wait $!
+
+  if [ -r $KILLSCRIPT_FILE ]; then
+    DATE=`date`;
+    echo "$DATE: autoscript killed"  >> syslog
+    clean_exit 
+  fi
+
+  while [ -r $PAUSE_FILE ]; do
+    sleep 60
+  done
+
+  sleep 5
+done
+
+clean_exit
+

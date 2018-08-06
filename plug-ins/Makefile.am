@@ -1,0 +1,5 @@
+SUBDIRS = \
+	  runtime \
+	  feniaroot 
+
+

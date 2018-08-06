@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="KOI8-R"?>
+<PlaneScape>
+    <basePath>.</basePath>
+    <baseAbsolute>false</baseAbsolute>
+
+    <libexecDir>libexec</libexecDir>
+
+    <logPattern>var/log/syslog.%Y%m%d-%H%M%S</logPattern>
+
+    <port>4000</port>
+    <pulsePerSecond>10</pulsePerSecond>
+    <maxMissedSeconds>4</maxMissedSeconds>
+
+    <mailSpoolDir>var/mail/spool</mailSpoolDir>
+
+    <killScriptFile>var/run/killscript</killScriptFile>
+    <pauseFile>var/run/pause</pauseFile>
+
+    <dbDir>var/db</dbDir>
+
+    <feniaDbDir>var/db/feniadb</feniaDbDir>
+
+    <playerDir>var/db/plrs</playerDir>
+    <playerAliasDir>var/db/plralias</playerAliasDir>
+    <playerObjsDir>var/db/plrobjs</playerObjsDir>
+    <playerVarsDir>var/db/plrvars</playerVarsDir>
+    <playerTextDir>var/db/plrtext</playerTextDir>
+    <playerIndexFile>var/db/plrs/player.index</playerIndexFile>
+
+    <ideaFile>var/db/bugs/idea</ideaFile>
+    <typosFile>var/db/bugs/typos</typosFile>
+    <bugsFile>var/db/bugs/bugs</bugsFile>
+    
+    <adminDir>var/db/admin</adminDir>
+    <xnameFile>var/db/admin/xnames</xnameFile>
+    <znameFile>var/db/admin/zname</znameFile>
+    <banFile>var/db/admin/badsites</banFile>
+    <proxyFile>var/db/admin/proxy</proxyFile>
+    
+    <boardsDir>var/db/boards</boardsDir>
+    <mailFile>var/db/boards/plrmail</mailFile>
+
+    <shopFile>var/db/shop.dat</shopFile>
+
+    <shareDir>share</shareDir>
+    <textDir>text</textDir>
+
+    <indexFile>index</indexFile>
+    <indexFileMini>index.mini</indexFileMini>
+    <wldDir>world/wld</wldDir>
+    <mobDir>world/mob</mobDir>
+    <objDir>world/obj</objDir>
+    <zonDir>world/zon</zonDir>
+    <scrDir>world/scr</scrDir>
+
+    <helpDir>help</helpDir>
+
+    <messFile>misc/messages</messFile>
+    <socialsFile>misc/socials</socialsFile>
+    <adverbFile>misc/adverb</adverbFile>
+    <cursesFile>misc/curses</cursesFile>
+    <spellsFile>misc/spells</spellsFile>
+    <xskillsFile>misc/skills.new</xskillsFile>
+    <skillsFile>misc/skills</skillsFile>
+    <bodyFile>misc/body</bodyFile>
+    <classesFile>misc/classes</classesFile>
+    <armorTemplFile>misc/atempl</armorTemplFile>
+    <weaponTemplFile>misc/wtempl</weaponTemplFile>
+    <missTemplFile>misc/stempl</missTemplFile>
+    <setsFile>misc/sets</setsFile>
+    <hitMessageFile>misc/hmess</hitMessageFile>
+    <enchantFile>misc/enchant</enchantFile>
+    <worldLootFile>misc/world_loot</worldLootFile>
+    <xformatFile>misc/xformat</xformatFile>
+    <materialsFile>misc/materials</materialsFile>
+    <horseShopFile>misc/hrs_shop.lst</horseShopFile>
+    <socialsFile>misc/socials</socialsFile>
+
+</PlaneScape>

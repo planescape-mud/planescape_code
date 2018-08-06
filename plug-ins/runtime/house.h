@@ -1,0 +1,22 @@
+#ifndef HOUSE_H
+#define HOUSE_H
+
+#define NUM_FRACTS 16
+#define FRACT_NONE 0
+#define FRACT_ATHAR 1
+#define FRACT_GODSMEN 2
+#define FRACT_MADMEN 3
+#define FRACT_DOOMGUARD 4
+#define FRACT_DUSTMEN 5
+#define FRACT_FATED 6
+#define FRACT_CUVNERS 7
+#define FRACT_INDEPS 8
+#define FRACT_HARMONIUM 9
+#define FRACT_RED_DEATH 10
+#define FRACT_ANARCHIST 11
+#define FRACT_SIGNERS 12
+#define FRACT_SENSATES 13
+#define FRACT_CIPHERS 14
+#define FRACT_CHAOSMEN 15
+
+#endif

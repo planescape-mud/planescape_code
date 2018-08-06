@@ -1,0 +1,49 @@
+#!/usr/bin/perl
+
+use MIME::Entity;
+
+$0='ps-mailer';
+die unless qx(ps acx | grep $0 | grep -v $$) eq "";
+
+my ($spool) = @ARGV;
+die "Cannot access dir '$spool'" unless -r $spool and -d $spool;
+
+sub send_one_file {
+    my ($file) = @_;
+
+    unless (open F, $file) {
+	print "can't open file $file: $!\n";
+	return;
+    }
+
+    my $email = <F>;
+    unless ($email =~ m/^[-+%a-z0-9_.]+@([-a-z0-9]+\.){1,}[a-z]{2,4}$/) {
+	print "invalid email address in $file\n";
+	return;
+    }
+
+    my $subject = <F>;
+    if ($subject =~ m/^\s*$/) {
+	print "empty subject in $file\n";
+	return;
+    } 
+
+    local $/;
+    my $message = <F>;
+
+    my $msg = MIME::Entity->build(From     => 'registrations@planescape.ru',
+				  To       => $email,
+				  Subject  => $subject,
+				  Type     => 'text/plain;charset=koi8-r',
+				  Data     => \$message);
+
+    open MAIL, "| /usr/sbin/sendmail -t -oi -oem" or die "open: $!";
+    $msg->print(\*MAIL);
+    close MAIL;
+
+    print "Sent email to $email, file $file.\n" ;
+    unlink $file;
+};
+
+map { &send_one_file($_); } <$spool/*.ml>;
+
