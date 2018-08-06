@@ -1,13 +1,15 @@
 *.in
+/admin/*
 !/admin/*.in
+!/admin/*.skl
+!/admin/*.pl
 *.diff
 *.log
 *.swp
 *.bak
 *~
 aclocal.m4
-/admin/ltmain.sh
-/admin/compile
+acinclude.m4
 /autom4te.cache
 /config.h.in~
 /configure
