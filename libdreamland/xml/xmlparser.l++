@@ -272,7 +272,7 @@ CDATA						"![CDATA["
 %%
 
 XMLParser::XMLParser( XMLDocument::Pointer& root, istream* istr )
-	: yyFlexLexer( istr, &ostr ), root( root ), rootNode( root ), currentNode( root )
+        : yyFlexLexer( &*istr, &cout ), root( root ), rootNode( root ), currentNode( root )
 {
 	BEGIN( NS_XMLDocument );
 }
