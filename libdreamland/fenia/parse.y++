@@ -36,7 +36,7 @@ FeniaParser::error( char* message )
 FeniaParser * parser = NULL;
 
 FeniaParser::FeniaParser(istream &src, CodeSource &s)
-		: yyFlexLexer( &src, &ostr ), source(s)
+                : yyFlexLexer( &src, &cout ), source(s)
 {
 	parser = this;
 }
