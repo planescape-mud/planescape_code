@@ -37,14 +37,47 @@ make -j 4 && make install
 ### Start MUD
 
 ```bash
-cd ../runtime
+cd /home/psmud/runtime
 ./bin/planescape etc/planescape.xml &
 ```
+Or, recommended:
+```bash
+./bin/autorun &
+```
+Autorun script will take care of restarting the server after a crash or a kill.
 
 ### View log files
 
 ```bash
 less var/log/syslog*
 ```
+### Changing a plugin
+First, rebuild and reinstall the plugin you want to change. For example, you've just changed something in feniaroot plugin:
+```bash
+cd /home/psmud/objs/plug-ins/feniaroot
+make -j 4 && make install
+```
+Tell the server to reload all plugins:
+```bash
+kill -s SIGUSR1 PID
+```
+Tell the server to reload just changed plugins:
+```bash
+kill -s SIGUSR2 PID
+```
+Note: when running as ./bin/autorun, you can use ``cat /home/psmud/runtime/var/run/ps.pid`` instead of PID to get the server process ID.
 
-
+### Changing core code or libdreamland
+First, rebuild and reinstall src or libdreamland. For example:
+```bash
+cd /home/psmud/objs/src
+make -j 4 && make install
+```
+Then reboot:
+```bash
+kill -1 PID
+```
+or, from inside the game, type:
+```
+shutdown reboot
+```
