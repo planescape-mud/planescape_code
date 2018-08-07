@@ -29,7 +29,7 @@
 #
 
 # PlaneScape runtime dir
-DIR=/home/psmud/git/runtime
+DIR=/home/planescape/runtime
 # PlaneScape binary
 BIN=bin/planescape
 

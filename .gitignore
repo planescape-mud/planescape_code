@@ -3,6 +3,7 @@
 !/admin/*.in
 !/admin/*.skl
 !/admin/*.pl
+!/admin/tools
 *.diff
 *.log
 *.swp
