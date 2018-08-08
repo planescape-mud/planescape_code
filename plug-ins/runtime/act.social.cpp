@@ -10,6 +10,9 @@
 
 #include "sysdep.h"
 
+#include "wrapperbase.h"
+#include "register-impl.h"
+
 #include "structs.h"
 #include "utils.h"
 #include "comm.h"
@@ -125,10 +128,28 @@ int find_nar1(char *nar, struct social_messg *action)
     return -1;
 }
 
+// Invoke Fenia social triggers for one of the observers.
+void mprog_social(struct char_data *ch, struct char_data *actor, struct char_data *vict, const char *social)
+{
+    FENIA_VOID_CALL( ch, "Social", "CCs", actor, vict, social );
+    FENIA_PROTO_VOID_CALL( ch->npc(), "Social", "CCCs", ch, actor, vict, social );
+
+}    
+
+// Invoke social trigger for everyone in the room.
+void mprog(struct char_data *actor, struct char_data *vict, const char *social)
+{
+    struct char_data *rch;
+
+    for (rch = world[actor->in_room].people; rch; rch = rch->next_in_room)
+        mprog_social(rch, actor, vict, social);
+}
+
 int do_social(struct char_data *ch, char *argument)
 {
     int act_nr;
     char social[MAX_INPUT_LENGTH], *nar;
+    const char *social_keyword;
     struct social_messg *action;
     struct char_data *vict;
     struct obj_data *fobj;
@@ -161,11 +182,13 @@ int do_social(struct char_data *ch, char *argument)
         *buf = '\0';
 
     nar = find_nar(buf, action);
+    social_keyword = get_soc_keyword(act_nr);
 
     // просто ввели социал без параметров и нет наречия
     if ((!*buf || !strcmp(buf, ".")) && !nar) {
         act(action->char_no_arg, FALSE, ch, 0, 0, TO_CHAR);
         act(action->others_no_arg, FALSE, ch, 0, 0, TO_ROOM);
+        mprog(ch, NULL, social_keyword);
         return (TRUE);
     }
 
@@ -181,6 +204,7 @@ int do_social(struct char_data *ch, char *argument)
             send_to_char(action->not_found ? action->not_found :
                          "Поищите кого-нибодь более доступного для этих целей.\r\n", ch);
             send_to_char("\r\n", ch);
+            return (TRUE);
         }
     } else if (vict == ch) {
         argument = one_argument(argument, buf);
@@ -196,8 +220,10 @@ int do_social(struct char_data *ch, char *argument)
             act(action->others_no_arg, FALSE, ch, 0, 0, TO_ROOM);
         }
     } else {
-        if (GET_POS(vict) < action->vict_min_pos || GET_POS(vict) > action->vict_max_pos)
+        if (GET_POS(vict) < action->vict_min_pos || GET_POS(vict) > action->vict_max_pos) {
             act("$N2 сейчас, похоже, не до Вас.", FALSE, ch, 0, vict, TO_CHAR | TO_SLEEP);
+            return (TRUE);
+        }
         else {
             argument = one_argument(argument, buf);
             nar = find_nar(buf, action);
@@ -217,10 +243,10 @@ int do_social(struct char_data *ch, char *argument)
                 act(action->others_found, FALSE, ch, 0, vict, TO_NOTVICT);
                 act(action->vict_found, FALSE, ch, 0, vict, TO_VICT);
             }
-            strcpy(buf, get_soc_keyword(act_nr));
         }
     }
 
+    mprog(ch, vict, social_keyword);
     return (TRUE);
 }
 
