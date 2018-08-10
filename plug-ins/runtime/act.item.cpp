@@ -757,6 +757,12 @@ static void mprog_bribe(struct char_data *ch, struct char_data *giver, int amoun
     FENIA_PROTO_VOID_CALL(ch->npc(), "Bribe", "CCi", ch, giver, amount);
 }
 
+static void mprog_give(struct char_data *ch, struct char_data *giver, struct obj_data *obj)
+{
+    FENIA_VOID_CALL(ch, "Give", "CO", giver, obj);
+    FENIA_PROTO_VOID_CALL(ch->npc(), "Give", "CCo", ch, giver, obj);
+}
+
 void perform_give(struct char_data *ch, struct char_data *vict, struct obj_data *obj)
 {
     if (ch == vict) {
@@ -826,6 +832,8 @@ void perform_give(struct char_data *ch, struct char_data *vict, struct obj_data 
         int amount = get_check_money(vict, obj);
 
         mprog_bribe(vict, ch, amount);
+    } else {
+        mprog_give(vict, ch, obj);
     }
 }
 
