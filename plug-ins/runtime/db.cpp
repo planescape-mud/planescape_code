@@ -10,6 +10,9 @@
 #include "sysdep.h"
 #include "profiler.h"
 
+#include "wrapperbase.h"
+#include "register-impl.h"
+
 #include "structs.h"
 #include "utils.h"
 #include "db.h"
@@ -1121,6 +1124,10 @@ void log_zone_error(zone_rnum zone, int cmd_no, const char *message)
 #define ZONE_ERROR(message) \
     { log_zone_error(zone, cmd_no, message); last_cmd = 0; }
 
+static void rprog_reset(struct room_data *room)
+{
+    FENIA_VOID_CALL(room, "Reset", "");
+}
 
 void new_reset_zone(zone_rnum zone)
 {
@@ -1511,6 +1518,8 @@ void new_reset_zone(zone_rnum zone)
         }
         //log("...конец проверки на следование монстра");
         //конец проверки
+        
+        rprog_reset(&world[count]);
     }
 
     zone_table[zone].age = 0;
