@@ -102,10 +102,17 @@ struct char_data * CharacterWrapper::getTarget( ) const
     if (target->npc()->isProto()) \
         throw Scripting::Exception("Prototype method requested on mobile instance");
 
+#define GETWRAP(x, h) NMI_GET(CharacterWrapper, x, h) { \
+    checkTarget(); \
+    return wrap(target->x); \
+}
+
 
 /*
  * FIELDS
  */
+GETWRAP(master, "тот, за кем следуем")
+
 NMI_GET( CharacterWrapper, online, "переменная true если персонаж в мире" )
 {
     return Register( target != NULL );
