@@ -9,6 +9,10 @@
 ************************************************************************ */
 
 #include "sysdep.h"
+
+#include "wrapperbase.h"
+#include "register-impl.h"
+
 #include "structs.h"
 #include "utils.h"
 #include "comm.h"
@@ -1073,6 +1077,18 @@ void death(struct char_data *ch)
         extract_char(ch, FALSE);
 }
 
+static void mprog_death(struct char_data *ch, struct char_data *killer)
+{
+    FENIA_VOID_CALL(ch, "Death", "C", killer);
+    FENIA_PROTO_VOID_CALL(ch->npc(), "Death", "CC", ch, killer);
+}
+
+static void mprog_kill(struct char_data *ch, struct char_data *victim)
+{
+    FENIA_VOID_CALL(ch, "Kill", "C", victim);
+    FENIA_PROTO_VOID_CALL(ch->npc(), "Kill", "CC", ch, victim);
+}
+
 //Процедура смерти персонажа
 void die(struct char_data *ch, struct char_data *killer)
 {
@@ -1148,6 +1164,10 @@ void die(struct char_data *ch, struct char_data *killer)
             RENTABLE(ch) = 0;
     }
 
+    if (killer)
+        mprog_kill(killer, ch);
+
+    mprog_death(ch, killer);
 
     if (!IS_NPC(ch) && !IS_GOD(ch)) {
 
