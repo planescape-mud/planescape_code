@@ -760,7 +760,7 @@ static void mprog_bribe(struct char_data *ch, struct char_data *giver, int amoun
 static void mprog_give(struct char_data *ch, struct char_data *giver, struct obj_data *obj)
 {
     FENIA_VOID_CALL(ch, "Give", "CO", giver, obj);
-    FENIA_PROTO_VOID_CALL(ch->npc(), "Give", "CCo", ch, giver, obj);
+    FENIA_PROTO_VOID_CALL(ch->npc(), "Give", "CCO", ch, giver, obj);
 }
 
 void perform_give(struct char_data *ch, struct char_data *vict, struct obj_data *obj)
