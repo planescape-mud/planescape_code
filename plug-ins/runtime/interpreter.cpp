@@ -10,6 +10,9 @@
 
 #include "sysdep.h"
 
+#include "wrapperbase.h"
+#include "register-impl.h"
+
 #include "structs.h"
 #include "comm.h"
 #include "ban.h"
@@ -189,7 +192,30 @@ void send_hide_mess(struct char_data *ch, int i)
         ch->visible_by.clear();
 }
 
+
+// Hook for commands defined in other plugins. Quick solution to 
+// add commands such as 'cs', 'eval' etc.
 bool(*plugin_command_hook) (struct char_data *, char *, char *) = 0;
+
+/*
+ * Invoke Fenia triggers for command interpreter.
+ * onCommand:
+ *      Called on every character in the room if a command is performed near them. 
+ *      Returning true will interrupt normal command processing.
+ * Adequate position for executing the command needs to be checked inside the trigger.
+ */
+static bool mprog_command(struct char_data *actor, const char *cmd, const char *line)
+{
+    struct char_data *rch, *rch_next;
+
+    for (rch = world[IN_ROOM(actor)].people; rch; rch = rch_next) {
+        rch_next = rch->next_in_room;
+        FENIA_BOOL_CALL(rch, "Command", "Css", actor, cmd, line);
+        FENIA_PROTO_BOOL_CALL(rch->npc(), "Command", "CCss", rch, actor, cmd, line); 
+    }
+
+    return false;
+}
 
 /*
  * This is the actual command interpreter called from game_loop() in comm.c
@@ -262,6 +288,21 @@ void command_interpreter(struct char_data *ch, char *cargument)
         return;
     }
 
+    // Call Fenia triggers for any user input.
+    if ((!GET_MOB_HOLD(ch) && !AFF_FLAGGED(ch, AFF_STOPFIGHT) && !AFF_FLAGGED(ch, AFF_STUNE))
+           || GET_COMMSTATE(ch)) 
+    {
+        int cont = 0;       /* continue the command checks */
+
+        cont = mprog_command(ch, arg, line);
+
+        if (cont) {
+            i = check_hiding_cmd(ch, -1);
+            send_hide_mess(ch, i);
+            return;         // command trigger took over
+        }
+    }
+
     bool fnd = FALSE;
 
     for (cmd = 0; *cmd_info[cmd].command != '\n'; cmd++)
@@ -285,21 +326,6 @@ void command_interpreter(struct char_data *ch, char *cargument)
     if ((PLR_FLAGGED(ch, PLR_SOUL)) && !cmd_info[cmd].hold) {
         send_to_charf(ch, "У Вас нет тела, которое могло бы выполнить данное действие!\r\n");
         return;
-    }
-
-    if (!fnd) {
-        if (                    // GET_LEVEL(ch) < LVL_IMMORT &&
-               (!GET_MOB_HOLD(ch) && !AFF_FLAGGED(ch, AFF_STOPFIGHT) && !AFF_FLAGGED(ch, AFF_STUNE))
-               || GET_COMMSTATE(ch)
-            ) {
-            int cont = 0;       /* continue the command checks */
-
-            if (cont) {
-                i = check_hiding_cmd(ch, -1);
-                send_hide_mess(ch, i);
-                return;         // command trigger took over
-            }
-        }
     }
 
     if (*cmd_info[cmd].command == '\n') {
@@ -928,10 +954,10 @@ int pre_help(struct char_data *ch, char *arg)
 
 void msg_return(struct char_data *ch, int load_room)
 {
-	if (world[load_room].hotel && world[load_room].hotel->MessReturn)
-	    act(world[load_room].hotel->MessReturn, "Км", ch);
-	else
-	    act("$n вступил$g в игру.", TRUE, ch, 0, 0, TO_ROOM);
+    if (world[load_room].hotel && world[load_room].hotel->MessReturn)
+        act(world[load_room].hotel->MessReturn, "Км", ch);
+    else
+        act("$n вступил$g в игру.", TRUE, ch, 0, 0, TO_ROOM);
 }
 
 void do_entergame(struct descriptor_data *d)
@@ -1018,7 +1044,7 @@ void do_entergame_(struct descriptor_data *d, int load_room)
 
 
     if (m_reboot == -1) {
-    	msg_return(d->character, load_room);
+        msg_return(d->character, load_room);
     }
 
     /* with the copyover patch, this next line goes in enter_player_game() */
