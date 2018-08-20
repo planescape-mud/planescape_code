@@ -9,6 +9,10 @@
 ************************************************************************ */
 
 #include "sysdep.h"
+
+#include "wrapperbase.h"
+#include "register-impl.h"
+
 #include "structs.h"
 #include "utils.h"
 #include "comm.h"
@@ -1124,6 +1128,52 @@ int do_simple_move(struct char_data *ch, int dir, int need_specials_check, bool 
     return (direction);
 }
 
+/*
+ * Invoke Fenia triggers for movement.
+ * onEntry,postEntry:
+ *      Called for each party member immediately after they entered the room.
+ * onGreet,postGreet:
+ *      Called on every mobile in the room, for each party member immediately after their onEntry.
+ */
+static void mprog_greet(struct char_data *rch, struct char_data *walker, const char *from_dirname)
+{
+    FENIA_VOID_CALL(rch, "Greet", "Cs", walker, from_dirname);
+    FENIA_PROTO_VOID_CALL(rch->npc(), "Greet", "CCs", rch, walker, from_dirname);
+}
+
+static void mprog_entry(struct char_data *walker)
+{
+    FENIA_VOID_CALL(walker, "Entry", "");
+    FENIA_PROTO_VOID_CALL(walker->npc(), "Entry", "");
+}
+
+// Stop triggers if walker is dead or transferred somewhere else.
+static bool still_here(struct char_data *walker, room_rnum was_in)
+{
+    if (!walker || GET_POS(walker) != POS_STANDING)
+        return false;
+    if (walker->in_room != was_in)
+        return false;    
+    return true;
+}
+
+static void prog_movement(struct char_data *walker, int to_dir)
+{
+    struct char_data *rch, *rch_next;
+    room_rnum was_in = walker->in_room;
+    const char *from_dirname = dirs[rev_dir[to_dir]];
+        
+    mprog_entry(walker);
+    if (!still_here(walker, was_in))
+        return;
+                
+    for (rch = world[IN_ROOM(walker)].people; rch; rch = rch_next) {
+        rch_next = rch->next_in_room;
+        mprog_greet(rch, walker, from_dirname);
+        if (!still_here(walker, was_in))
+            return;
+    }
+}
 
 int perform_move(struct char_data *ch, int dir, int need_specials_check, int checkmob)
 {
@@ -1197,6 +1247,8 @@ int perform_move(struct char_data *ch, int dir, int need_specials_check, int che
                 look_at_room(ch, 0);
             event_mob(ch, NULL, EVNT_ENTER, dir);
         }
+
+        prog_movement(ch, dir);
         return (TRUE);
     }
     return (FALSE);
