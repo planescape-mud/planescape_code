@@ -182,11 +182,22 @@ void garble_text(char *string, int percent, int lang)
                 string[i] = letters[number(0, s)];
 }
 
-static void mprog_speech(struct char_data *listener, struct char_data *talker, const char *msg)
+/* Invoke Fenia speech progs for all non-deaf listeners in the same room.
+ * Output can be garbled for PCs. 
+ * Invoked immediately after all output has been done.
+ */
+typedef std::map<struct char_data *, string> HeardMessages; 
+
+static void mprog_speech(struct char_data *talker, const HeardMessages &messages)
 {
-    FENIA_VOID_CALL(listener, "Speech", "Cs", talker, msg);
-    FENIA_PROTO_VOID_CALL(listener->npc(), "Speech", "CCs", listener, talker, msg);
+    for (HeardMessages::const_iterator m = messages.begin( ); m != messages.end( ); m++) {
+        struct char_data *listener = m->first;
+        const char *msg = m->second.c_str( );
+        FENIA_VOID_CALL(listener, "Speech", "Cs", talker, msg);
+        FENIA_PROTO_VOID_CALL(listener->npc(), "Speech", "CCs", listener, talker, msg);
+    }    
 }
+
 
 ACMD(do_say)
 {
@@ -225,8 +236,12 @@ ACMD(do_say)
     /*  if (!IS_NPC(ch))
        garble_text(ibuf, GET_SKILL(ch, SPEAKING(ch)), SPEAKING(ch)); */
 
+    // Keep track of all messages sent to every person in the room,
+    // to use in Fenia triggers. 
+    HeardMessages messages;
+
     for (tch = world[ch->in_room].people; tch; tch = tch->next_in_room) {
-        if (tch != ch && AWAKE(tch) && (tch->desc || tch->mess_data || tch->wrapper)) {
+        if (tch != ch && AWAKE(tch) && (tch->desc || tch->mess_data || tch->hasWrapper())) {
             for (k = tch->mess_data; !found && k; k = k->next) {
                 if (k->command == CMD_SAY) {
                     found = k;
@@ -241,18 +256,19 @@ ACMD(do_say)
             if (!IS_NPC(tch) && !PRF_FLAGGED(tch, PRF_CURSES))
                 curses_check(obuf);
 
-            if (IS_GOD(ch))
+            if (IS_GOD(ch)) 
                 act("1и произнес1(,ла,ло,ли): '&W%1&n'", "мМт", ch, tch, obuf);
-            else if (IS_AFFECTED(tch, AFF_DEAFNESS))
-                sprintf(buf, "1и шевелит губами.");
+            else if (IS_AFFECTED(tch, AFF_DEAFNESS)) {
+                act("1и шевелит губами.", "мМ", ch, tch);
+                continue;
+            }
             else if (found && found->mess_to_vict)
                 act(found->mess_to_vict, "мМт", ch, tch, obuf);
             else {
                 act("1и произнес1(,ла,ло,ли): '&c%1&n'", "мМт", ch, tch, obuf);
             }
-            //act(buf,"мМ",ch,tch);
 
-            mprog_speech(tch, ch, obuf);
+            messages[tch] = obuf;
         }
     }
 
@@ -273,7 +289,8 @@ ACMD(do_say)
             go_script(found->script, ch, argument);
         }
     }
-
+    
+    mprog_speech(ch, messages);
 }
 
 ACMD(do_appeal)
