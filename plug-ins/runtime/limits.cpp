@@ -502,11 +502,15 @@ void gain_exp(struct char_data *ch, int gain, bool show_mess)
         }
 
         if (show_mess)
+		{
             send_to_charf(ch, "Ваш опыт повысился на %d %s.\r\n", gain,
                           desc_count(gain, WHAT_POINT));
+			if (get_dsu_exp(ch) == 0)
+				send_to_charf(ch, "&GПоздравляем! Теперь у Вас достаточно опыта, чтобы повысить свой уровень.&n\r\n");
+		}
     } else {
         if (show_mess)
-            send_to_charf(ch, "Ваш опыт не изменился.\r\n");
+            send_to_charf(ch, "Ваш опыт не изменился. Возможно стоит повысить свой уровень?\r\n");
     }
 
     if (IS_NPC(ch)) {

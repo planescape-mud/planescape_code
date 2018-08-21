@@ -1366,14 +1366,14 @@ void nanny(struct descriptor_data *d, char *arg)
                    }
                    } *///Проверка на мультинг
                 /* Проверка на скорость создания */
-                if (check_ip(d->host)) {
+                /*if (check_ip(d->host)) {
                     SEND_TO_Q(MSG_NEW_TIME_DENY, d);
                     sprintf(buf, "Попытка создания нового персонажа отклонена для [%s] (ip_table)",
                             d->host);
                     mudlog(buf, NRM, LVL_HIGOD, TRUE);
                     STATE(d) = CON_CLOSE;
                     return;
-                }
+                }*/
                 /* Проверка на запрет создания новых */
                 if (mud->modRestrict) {
                     SEND_TO_Q(MSG_NEW_REST_DENY, d);
@@ -1827,7 +1827,7 @@ void nanny(struct descriptor_data *d, char *arg)
                     break;
             }
 
-            SEND_TO_Q(MSG_EMAIL_NOTE, d);
+            //SEND_TO_Q(MSG_EMAIL_NOTE, d);
             SEND_TO_Q(MSG_EMAIL, d);
             STATE(d) = CON_GET_EMAIL;
             break;
