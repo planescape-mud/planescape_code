@@ -35,7 +35,7 @@
 const char *race_menu =
     "\r\n"
     "Ваша раса:\r\n"
-    "1) Человек &G(Рекомендуется для новичка)&n\r\n"
+    "1) Человек\r\n"
     "2) Орк\r\n"
     "3) Гном\r\n"
     "4) Эльф\r\n"
@@ -45,8 +45,8 @@ const char *race_menu =
     "8) Эйзимар\r\n"
     "9) Дроу\r\n"
     "Для получения справки напишите: справка <раса>, например: справка тифлинг\r\n"
-    /*"Полную информацию по расам Сигила можно получить на сайте http://www.planescape.ru/\r\n"
-    "в разделе \"энциклопедия\".\r\n"*/
+    "Полную информацию по расам Сигила можно получить на сайте http://www.planescape.ru/\r\n"
+    "в разделе \"энциклопедия\".\r\n"
     ;
 
 #define ALIGN_ANY 100
@@ -135,11 +135,11 @@ void display_align(struct char_data *ch) {
             send_to_char(buf, ch);
             i++;
         }
-    send_to_charf(ch, "Если вы тут впервые, то рекомендуется выбрать &Gнейтральную&n натуру.\r\n");
-                  /*"Для получения справки напишите: справка <натура>, например: справка злой\r\n"
+    send_to_charf(ch,
+                  "Для получения справки напишите: справка <натура>, например: справка злой\r\n"
                   "Более подробную информацию смотрите на сайте http://www.planescape.ru\r\n"
-                  "в разделе \"энциклопедия\".\r\n"*/
-                // );
+                  "в разделе \"энциклопедия\".\r\n"
+                 );
 
 }
 
@@ -160,7 +160,7 @@ void display_align(struct char_data *ch) {
 
 //Временная таблица
 int gods_ok_race[NUM_GODS][NUM_RACES] = {
-    /*                 Hm, Or, Gn, El, He, Br, Ti, Aa */
+    /*                 Hm, Or, Gn, El, He, Br, Ti, Aa, Dr */
     /* NULL       */ {  N,  N,  N,  N,  N,  N,  N,  N, N },
     /* prPelor    */ {  Y,  N,  Y,  Y,  Y,  Y,  N,  Y, N },
     /* prElona    */ {  N,  N,  N,  N,  N,  N,  N,  N, N },
@@ -168,7 +168,7 @@ int gods_ok_race[NUM_GODS][NUM_RACES] = {
     /* prFarlan   */ {  Y,  Y,  Y,  Y,  Y,  Y,  Y,  Y, Y },
     /* prOlidam   */ {  N,  N,  N,  N,  N,  N,  N,  N, N },
     /* prGubert   */ {  N,  N,  N,  N,  N,  N,  N,  N, N },
-    /* prGruumsh  */ {  Y,  Y,  Y,  N,  N,  Y,  Y,  N, N },
+    /* prGruumsh  */ {  Y,  Y,  Y,  N,  Y,  Y,  Y,  N, Y },
     /* prNerull   */ {  N,  N,  N,  N,  N,  N,  N,  N, N },
     /* prHextor   */ {  N,  N,  N,  N,  N,  N,  N,  N, N }
 };

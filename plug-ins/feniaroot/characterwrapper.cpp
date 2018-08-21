@@ -113,6 +113,13 @@ struct char_data * CharacterWrapper::getTarget( ) const
  */
 GETWRAP(master, "тот, за кем следуем")
 
+
+NMI_GET( CharacterWrapper, sex, "пол персонажа" )
+{
+    checkTarget();
+    return GET_SEX(target); 
+}
+
 NMI_GET( CharacterWrapper, level, "уровень персонажа" )
 {
     checkTarget();
@@ -125,6 +132,13 @@ NMI_GET( CharacterWrapper, race, "раса чара" )
     return GET_RACE(target); 
 }
 
+NMI_GET( CharacterWrapper, is_pc, "живой (true) игрок или моб(false)" )
+{
+    checkTarget();
+	if (target->pc())
+		return true;
+	return false;
+}
 
 NMI_GET( CharacterWrapper, online, "переменная true если персонаж в мире" )
 {

@@ -43,6 +43,7 @@ player_special_data::player_special_data()
     aliases = 0;
     last_tell = NOBODY;
     may_rent = 0;
+	msg_zero_dsu = false;
 }
 
 player_special_data::~player_special_data()

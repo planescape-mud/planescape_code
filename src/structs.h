@@ -2282,6 +2282,7 @@ struct player_special_data {
     struct alias_data *aliases;      /* Character's aliases    */
     long   last_tell;        /* idnum of last tell from    */
     int    may_rent;                 /* PK control                       */
+	bool msg_zero_dsu;       // флаг, который показывает, что чару на этом левеле уже было сообщение о том, что пора идти к учителю
 };
 
 // список внумов мобов-помощников
@@ -2890,7 +2891,7 @@ struct bug_abuse_data {
 struct Player : public char_data {
     Player();
     virtual ~Player();
-
+	
     virtual Mobile * npc();
     virtual Player * pc();
     virtual const Mobile * npc() const;
