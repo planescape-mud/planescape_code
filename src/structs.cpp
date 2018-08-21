@@ -340,8 +340,14 @@ char_data::~char_data()
 void char_data::linkWrapper()
 {
     if (FeniaManager::wrapperManager)
-	FeniaManager::wrapperManager->linkWrapper(this);
+    FeniaManager::wrapperManager->linkWrapper(this);
 }
+
+bool char_data::hasWrapper() const
+{
+    return wrapper != NULL;
+}
+
 
 bool char_data::immortal() const
 {
@@ -438,6 +444,11 @@ Mobile * Mobile::getProto()
 bool Mobile::isProto() const
 {
     return getProto() == this;
+}
+
+bool Mobile::hasWrapper() const
+{
+    return wrapper != NULL || getProto()->wrapper != NULL;
 }
 
 /*---------------------------------------------------------------------------*
@@ -587,7 +598,12 @@ bool obj_data::isProto() const
 void obj_data::linkWrapper()
 {
     if (FeniaManager::wrapperManager)
-	FeniaManager::wrapperManager->linkWrapper(this);
+    FeniaManager::wrapperManager->linkWrapper(this);
+}
+
+bool obj_data::hasWrapper() const
+{
+    return wrapper != NULL || getProto()->wrapper != NULL;
 }
 
 mob_quest_data::mob_quest_data()
@@ -741,7 +757,12 @@ room_data::room_data(int vnum)
 void room_data::linkWrapper()
 {
     if (FeniaManager::wrapperManager)
-	FeniaManager::wrapperManager->linkWrapper(this);
+    FeniaManager::wrapperManager->linkWrapper(this);
+}
+
+bool room_data::hasWrapper() const
+{
+    return wrapper != NULL;
 }
 
 P_message::P_message()

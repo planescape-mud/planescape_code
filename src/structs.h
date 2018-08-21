@@ -1689,6 +1689,7 @@ struct obj_data : public WrapperTarget {
     struct obj_data * getProto();
     
     void linkWrapper();
+    bool hasWrapper() const;
 
 protected:
     void init();
@@ -1931,6 +1932,7 @@ struct room_data : public WrapperTarget {
     
     void init();
     void linkWrapper();
+    bool hasWrapper() const;
 
     room_vnum number;        /* Rooms number (vnum)              */
     zone_rnum zone;              /* Room zone (for resetting)          */
@@ -2759,6 +2761,7 @@ struct char_data : public WrapperTarget {
     bool immortal() const;
     
     void linkWrapper();
+    virtual bool hasWrapper() const;
     
 protected:
     void init();
@@ -2910,6 +2913,7 @@ struct Mobile : public char_data {
     bool isProto() const;
     const Mobile * getProto() const;
     Mobile * getProto();
+    virtual bool hasWrapper() const;
     
     struct mob_special_data specials; // поля присущие только мобу
 };
