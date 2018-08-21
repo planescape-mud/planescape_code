@@ -113,6 +113,19 @@ struct char_data * CharacterWrapper::getTarget( ) const
  */
 GETWRAP(master, "тот, за кем следуем")
 
+NMI_GET( CharacterWrapper, level, "уровень персонажа" )
+{
+    checkTarget();
+    return GET_LEVEL(target); 
+}
+
+NMI_GET( CharacterWrapper, race, "раса чара" )
+{
+    checkTarget();
+    return GET_RACE(target); 
+}
+
+
 NMI_GET( CharacterWrapper, online, "переменная true если персонаж в мире" )
 {
     return Register( target != NULL );
