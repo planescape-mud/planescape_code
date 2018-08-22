@@ -230,6 +230,27 @@ NMI_INVOKE(Root, mob_proto_virtual, "вернет прототип моба по номеру заданному в 
     return wrap( &mob_proto[rnum] );
 }
 
+NMI_INVOKE(Root, obj_proto_real, "вернет прототип предмета по внутреннему номеру")
+{
+    int rnum = args2number(args);
+
+    if (rnum < 0 || rnum > top_of_objt)
+        throw CustomException("Invalid obj real number");
+
+    return wrap( &obj_proto[rnum] );
+
+}
+
+NMI_INVOKE(Root, obj_proto_virtual, "вернет прототип предмета по номеру заданному в зоне")
+{
+    int rnum = real_object(args2number(args));
+
+    if (rnum < 0)
+        throw CustomException("Invalid obj virtual number");
+
+    return wrap( &obj_proto[rnum] );
+}
+
 NMI_INVOKE(Root, room_virtual, "вернет комнату по номеру заданному в зоне")
 {
     int rnum = real_room(args2number(args));
