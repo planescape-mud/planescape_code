@@ -135,11 +135,11 @@ void WrapperBase::triggerArgs( RegisterList &regList, const char *fmt, va_list a
         }
 }
 
-bool WrapperBase::triggerFunction(const Register &key, Register &prog)
+bool WrapperBase::triggerFunction(const Register &key, Register &prog) const
 {    
     Lex::id_t id = key.toIdentifier( );
     
-    Guts::iterator i = guts.find(id);
+    Guts::const_iterator i = guts.find(id);
 
     if(i == guts.end( )) 
         return false;

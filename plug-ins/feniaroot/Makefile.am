@@ -9,6 +9,7 @@ impl.cpp \
 root.cpp \
 schedulerwrapperext.cpp \
 validatetask.cpp \
+pluginnativeimpl.cpp \
 wrappermanager.cpp \
 wrappersplugin.cpp \
 idcontainerext.cpp \

@@ -1627,7 +1627,9 @@ int awaking(struct char_data *ch, int mode);
 #define SENDOK(ch)      ((ch)->desc && \
                          (to_sleeping || AWAKE(ch)) && \
                          !PLR_FLAGGED((ch), PLR_WRITING))
-
+#define PLR_EDITING(ch) (PLR_FLAGGED((ch), PLR_WRITING) || \
+                         PLR_FLAGGED((ch), PLR_MAILING) || \
+                         PLR_FLAGGED((ch), PLR_SCRIPTING))
 
 
 #define a_isspace(c) (strchr(" \f\n\r\t\v",(c)) != NULL)

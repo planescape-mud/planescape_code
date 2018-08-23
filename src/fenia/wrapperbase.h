@@ -48,7 +48,7 @@ public:
 protected:
     bool vcall( Register &rc, const Register &key, const char *fmt, va_list ap);
     virtual void croak(const Register &key, const Exception &e) const;
-    bool triggerFunction(const Register &key, Register &prog);
+    bool triggerFunction(const Register &key, Register &prog) const;
     void triggerArgs( RegisterList &regList, const char *fmt, va_list ap );
 
     Scripting::Object * self;

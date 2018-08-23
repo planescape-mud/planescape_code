@@ -4,8 +4,10 @@
 #include <sstream>
 
 #include "native.h"
+#include "codesource.h"
 #include "wrapperbase.h"
 #include "schedulerwrapper.h"
+#include "logstream.h"
 
 using namespace Scripting;
 
@@ -18,6 +20,8 @@ class PluginNativeImpl : public NativeImpl<T> { }
 template <typename T>
 class PluginWrapperImpl : public PluginNativeImpl<T>, public WrapperBase { }
 #endif
+
+extern void fenia_wiznet(const CodeSource::Pointer &codeSource, const DLString &key, const DLString &what);
 
 // MOC_SKIP_BEGIN
 template <typename T>
@@ -59,7 +63,15 @@ public:
     }
 
     virtual void croak(const Register &key, const ::Exception &e) const {
-        /* TODO fenia orb */
+        Register prog;
+    
+        // Complain about exception to every immortal in the game.    
+        if (triggerFunction(key, prog)) {
+            const CodeSource::Pointer &codeSource = prog.toFunction()->source.source;
+            fenia_wiznet(codeSource, key.toString(), e.what());
+        }
+        
+        // By default just output exception to system logs.
         WrapperBase::croak(key, e);
     }
 };
