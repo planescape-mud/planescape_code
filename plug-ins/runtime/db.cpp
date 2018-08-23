@@ -2348,7 +2348,7 @@ int load_char_ascii(char *name, Player * ch)
                 else if (!strcmp(tag, "Slep"))
                     GET_COND(ch, SLEEP) = num;
                 else if (!strcmp(tag, "Spek"))
-                    SPEAKING(ch) = num;
+                    SPEAKING(ch) = MAX(num, MIN_LANGUAGES);
                 else if (!strcmp(tag, "SExp")) {
                     sscanf(line, "%d %d", &num, &num2);
                     inc_exp_script_num(ch, num, num2);
