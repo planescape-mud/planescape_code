@@ -1150,7 +1150,7 @@ static void mprog_entry(struct char_data *walker)
 // Stop triggers if walker is dead or transferred somewhere else.
 static bool still_here(struct char_data *walker, room_rnum was_in)
 {
-    if (!walker || GET_POS(walker) != POS_STANDING)
+    if (!walker || GET_POS(walker) <= POS_STUNNED)
         return false;
     if (walker->in_room != was_in)
         return false;    

@@ -45,11 +45,6 @@ DLString args2string( const RegisterList &args )
     return get_unique_arg( args ).toString( );
 }
 
-const char * arg2cstr( const Register &reg )
-{
-    return reg.toString( ).c_str( );
-}
-
 struct char_data * arg2character( const Register &reg )
 {
     return wrapper_cast<CharacterWrapper>( reg )->getTarget( );
@@ -69,5 +64,23 @@ void args2buf(const RegisterList &args, char *buf, size_t bufsize)
 {
     strncpy(buf, args2string(args).c_str(), bufsize);
     buf[bufsize - 1] = 0;
+}
+
+const Register & arg_one( const RegisterList &args )
+{
+    if (args.empty( ))
+       throw Scripting::NotEnoughArgumentsException( );
+
+    return args.front( );
+}
+
+const Register & arg_two( const RegisterList &args )
+{
+    if (args.size( ) < 2)
+       throw Scripting::NotEnoughArgumentsException( );
+
+    RegisterList::const_iterator iter = args.begin( );
+    iter++;
+    return *iter;
 }
 

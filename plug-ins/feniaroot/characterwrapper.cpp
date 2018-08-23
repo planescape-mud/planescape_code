@@ -14,6 +14,7 @@
 #include "comm.h"
 #include "db.h"
 #include "spells.h"
+#include "constants.h"
 #include "interpreter.h"
 #include "../runtime/handler.h"
 
@@ -109,15 +110,21 @@ struct char_data * CharacterWrapper::getTarget( ) const
 
 
 /*
- * FIELDS
+ * FIELDS getters
  */
 GETWRAP(master, "тот, за кем следуем")
 
 
-NMI_GET( CharacterWrapper, sex, "пол персонажа" )
+NMI_GET( CharacterWrapper, sex, "номер пола персонажа (1, 2)" )
 {
     checkTarget();
     return GET_SEX(target); 
+}
+
+NMI_GET( CharacterWrapper, sexname, "название пола персонажа (мужчина, женщина)" )
+{
+    checkTarget();
+    return genders[(int) GET_SEX(target)];
 }
 
 NMI_GET( CharacterWrapper, level, "уровень персонажа" )
@@ -126,18 +133,24 @@ NMI_GET( CharacterWrapper, level, "уровень персонажа" )
     return GET_LEVEL(target); 
 }
 
-NMI_GET( CharacterWrapper, race, "раса чара" )
+NMI_GET( CharacterWrapper, race, "номер расы персонажа" )
 {
     checkTarget();
     return GET_RACE(target); 
 }
 
+NMI_GET( CharacterWrapper, racename, "название расы персонажа в муж.роде (человек, бариаур)" )
+{
+    checkTarget();
+    return race_name[(int) GET_RACE(target)][1]; 
+}
+
 NMI_GET( CharacterWrapper, is_pc, "живой (true) игрок или моб(false)" )
 {
     checkTarget();
-	if (target->pc())
-		return true;
-	return false;
+    if (target->pc())
+        return true;
+    return false;
 }
 
 NMI_GET( CharacterWrapper, online, "переменная true если персонаж в мире" )
@@ -196,6 +209,13 @@ NMI_GET( CharacterWrapper, suf_w, "суффикс (ое/ый/ая/ые)" )
 {
     checkTarget();
     return GET_CH_SUF_3(target); 
+}
+
+NMI_GET( CharacterWrapper, exp, "опыт персонажа" )
+{
+    checkTarget();
+    // can rely on int and long int to be of the same size for ILP32 (4/4/4) model.
+    return Register((int)GET_EXP(target)); 
 }
 
 /*
@@ -339,3 +359,14 @@ NMI_INVOKE( CharacterWrapper, create, "создает новый экземпляр моба из этого про
 }
 
 
+/*
+ * METHODS for players only
+ */
+NMI_INVOKE( CharacterWrapper, gain_exp, "(exp, show_msg) набрать exp очков опыта, выводя сообщения игроку, если show_msg true" )
+{
+    METHOD_PC_ONLY
+    int exp = arg_one(args).toNumber();
+    bool show_message = arg_two(args).toBoolean();
+    ::gain_exp(target, exp, show_message);
+    return Register();
+}

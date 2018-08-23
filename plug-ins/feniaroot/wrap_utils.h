@@ -21,9 +21,10 @@ Register wrap( struct obj_data * );
 Register wrap( struct room_data * );
 
 const Register & get_unique_arg( const RegisterList & );
+const Register & arg_one( const RegisterList & );
+const Register & arg_two( const RegisterList & );
 int args2number( const RegisterList& );
 DLString args2string( const RegisterList& );
-const char * arg2cstr( const Register& );
 void args2buf(const RegisterList &args, char *buf, size_t bufsize);
 
 struct char_data * arg2character( const Register & );
