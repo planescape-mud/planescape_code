@@ -175,6 +175,36 @@ NMI_GET( CharacterWrapper, name_i, "имя (именительный падеж)" )
     return GET_PAD(target, 0); 
 }
 
+NMI_GET( CharacterWrapper, name_r, "имя (родительный падеж)" )
+{
+    checkTarget();
+    return GET_PAD(target, 1); 
+}
+
+NMI_GET( CharacterWrapper, name_d, "имя (дательный падеж)" )
+{
+    checkTarget();
+    return GET_PAD(target, 2); 
+}
+
+NMI_GET( CharacterWrapper, name_v, "имя (винительный падеж)" )
+{
+    checkTarget();
+    return GET_PAD(target, 3); 
+}
+
+NMI_GET( CharacterWrapper, name_t, "имя (творительный падеж)" )
+{
+    checkTarget();
+    return GET_PAD(target, 4); 
+}
+
+NMI_GET( CharacterWrapper, name_p, "имя (предложный падеж)" )
+{
+    checkTarget();
+    return GET_PAD(target, 5); 
+}
+
 NMI_GET( CharacterWrapper, suf_w, "суффикс (ое/ый/ая/ые)" )
 {
     checkTarget();
