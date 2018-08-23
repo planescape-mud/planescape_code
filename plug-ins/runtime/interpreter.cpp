@@ -10,6 +10,7 @@
 
 #include "sysdep.h"
 
+#include "logstream.h"
 #include "wrapperbase.h"
 #include "register-impl.h"
 
@@ -1975,7 +1976,9 @@ void nanny(struct descriptor_data *d, char *arg)
                     send_to_char("Вашему персонажу выдана тренировочная экипировка.\r\n",
                                  d->character);
                     TOGGLE_BIT(PRF_FLAGS(d->character, PRF_EQ), PRF_EQ);
+                    save_char(d->character, NOWHERE);
                     SEND_TO_Q(MENU, d);
+
                     break;
                 case '4':
                     char buf[MAX_STRING_LENGTH];
