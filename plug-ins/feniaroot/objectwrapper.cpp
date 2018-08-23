@@ -142,7 +142,8 @@ NMI_INVOKE( ObjectWrapper, obj_to_room, "положить предмет в комнату, переданную 
     roomWrap = wrapper_cast<RoomWrapper>(args.front( ));
 
     obj_from_anywhere( target );
-    ::obj_to_room( target, roomWrap->getTarget( ) );
+	room_rnum to_room = real_room(roomWrap->getTarget()->number);
+    ::obj_to_room( target, to_room );
     return Register( );
 }
 
