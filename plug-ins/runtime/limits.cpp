@@ -504,10 +504,10 @@ void gain_exp(struct char_data *ch, int gain, bool show_mess)
         if (show_mess)
 		{
             send_to_charf(ch, "Ваш опыт повысился на %d %s.\r\n", gain, desc_count(gain, WHAT_POINT));
-			if (get_dsu_exp(ch) < 1 && !ch->pc()->specials.msg_zero_dsu)
+			if (get_dsu_exp(ch) < 1 && ch->pc && !ch->pc()->specials.msg_zero_dsu)
 			{
 				send_to_charf(ch, "&GПоздравляем! Теперь у Вас достаточно опыта, чтобы повысить свой уровень.&n\r\n");
-				ch->pc()->specials.msg_zero_dsu = false;
+				ch->pc()->specials.msg_zero_dsu = true;
 			}
 		}
     } else {
