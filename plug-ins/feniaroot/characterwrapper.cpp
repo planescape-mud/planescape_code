@@ -169,6 +169,36 @@ NMI_GET( CharacterWrapper, in_room, "комната в которой сейчас находимся" )
     return wrap( VALID_RNUM(target->in_room) ? &world[target->in_room] : NULL );
 }
 
+NMI_GET( CharacterWrapper, is_warrior, "является ли игрок воином" )
+{
+    checkTarget();
+    return IS_WARRIOR(target); 
+}
+
+NMI_GET( CharacterWrapper, is_ranger, "является ли игрок охотником" )
+{
+    checkTarget();
+    return IS_RANGER(target); 
+}
+
+NMI_GET( CharacterWrapper, is_thief, "является ли игрок плутом" )
+{
+    checkTarget();
+    return IS_THIEF(target); 
+}
+
+NMI_GET( CharacterWrapper, is_necro, "является ли игрок некромантом" )
+{
+    checkTarget();
+    return IS_NECRO(target); 
+}
+
+NMI_GET( CharacterWrapper, is_priest, "является ли игрок жрецом" )
+{
+    checkTarget();
+    return IS_PRIEST(target); 
+}
+
 NMI_GET( CharacterWrapper, name_i, "имя (именительный падеж)" )
 {
     checkTarget();
