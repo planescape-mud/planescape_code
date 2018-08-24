@@ -27,6 +27,9 @@
 #include "dlfileop.h"
 #include "mudfile.h"
 
+#include "wrapperbase.h"
+#include "register-impl.h"
+
 /* extern functions */
 ACMD(do_drop);
 ACMD(do_hold);
@@ -402,6 +405,12 @@ int get_next_extra_level_by_skill(int skill_value, int ext_skill_value)
     return -1;
 }
 
+static void mprog_train_level(struct char_data *ch, struct char_data *teacher, int level)
+{
+	FENIA_VOID_CALL(ch, "TrainLevel", "Ci", teacher, level);
+    FENIA_PROTO_VOID_CALL(ch->npc(), "TrainLevel", "CCi", ch, teacher, level);
+}
+
 #define SCMD_LEARN 1
 #define SCMD_LEV 2
 
@@ -576,12 +585,12 @@ SPECIAL(trainer)
         case SCMD_LEV:
             //send_to_charf(ch,"Ваш gods %s, учитель gods %s\r\n",gods_name[(int)GET_GODS(ch)],gods_name[(int)GET_GODS(victim)]);
             if (IS_NECRO(victim) && !IS_EVILS(ch)) {
-                act("Вам не чему здесь тренироваться.", FALSE, ch, 0, 0, TO_CHAR);
+                act("Вам нечему здесь тренироваться.", FALSE, ch, 0, 0, TO_CHAR);
                 return (1);
             }
 
             if (IS_PRIEST(victim) && check_class(ch, CLASS_NECRO)) {
-                act("Вам не чему здесь тренироваться.", FALSE, ch, 0, 0, TO_CHAR);
+                act("Вам нечему здесь тренироваться.", FALSE, ch, 0, 0, TO_CHAR);
                 return (1);
             }
 
@@ -683,6 +692,7 @@ SPECIAL(trainer)
 
                     sprintf(buf, "$n повысил$g свою квалификацию в профессии %sа.",
                             class_name[(int) GET_CLASS(victim)]);
+					mprog_train_level(ch, victim, GET_LEVEL(ch));
                     act(buf, TRUE, ch, 0, victim, TO_ROOM);
                     if (GET_LEVEL(ch) == LVL_ROLL && !PRF_FLAGGED(ch, PRF_ROLL)) {
                         SET_BIT(PRF_FLAGS(ch, PRF_ROLL), PRF_ROLL);
