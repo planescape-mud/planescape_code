@@ -898,8 +898,8 @@ int do_simple_move(struct char_data *ch, int dir, int need_specials_check, bool 
     char_to_room(ch, go_to);
     if (GET_OBJ_LOCATE(ch) || GET_CHAR_LOCATE(ch))
         WAIT_STATE(ch, PULSE_LOCATE);
-    else
-        WAIT_STATE(ch, PULSE_MOVE);
+    //else
+        //WAIT_STATE(ch, PULSE_MOVE);
 
     if (horse) {
         int move_horse = IS_FLY(horse) ? 1 :

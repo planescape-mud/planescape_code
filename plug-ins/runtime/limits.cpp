@@ -503,12 +503,7 @@ void gain_exp(struct char_data *ch, int gain, bool show_mess)
 
         if (show_mess)
 		{
-            send_to_charf(ch, "Ваш опыт повысился на %d %s.\r\n", gain, desc_count(gain, WHAT_POINT));
-			if (get_dsu_exp(ch) < 1 && ch->pc && !ch->pc()->specials.msg_zero_dsu)
-			{
-				send_to_charf(ch, "&GПоздравляем! Теперь у Вас достаточно опыта, чтобы повысить свой уровень.&n\r\n");
-				ch->pc()->specials.msg_zero_dsu = true;
-			}
+            send_to_charf(ch, "Ваш опыт повысился на %d %s.\r\n", gain, desc_count(gain, WHAT_POINT));            
 		}
     } else {
         if (show_mess)
@@ -523,7 +518,12 @@ void gain_exp(struct char_data *ch, int gain, bool show_mess)
            send_to_charf(ch->master,"%s мой опыт повысился на %d очков.\r\n",GET_NAME(ch),gain); */
 
         GET_EXP(ch) += gain;
-
+        if (show_mess)
+            if (get_dsu_exp(ch) < 1 && ch->pc() && !ch->pc()->specials.msg_zero_dsu)
+            {
+                send_to_charf(ch, "&GПоздравляем! Теперь у Вас достаточно опыта, чтобы повысить свой уровень.&n\r\n");
+                ch->pc()->specials.msg_zero_dsu = true;
+            }
         if (GET_EXP(ch) >= level_exp(ch, GET_LEVEL(ch) + 1)) {
             int next_level = check_class(ch, GET_CLASS(ch));
 

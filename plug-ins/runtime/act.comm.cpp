@@ -976,12 +976,12 @@ ACMD(do_gen_comm)
         return;
     }
 
-    if (GET_LEVEL(ch) < com_msgs[subcmd].min_lev && GET_REMORT(ch) == 0) {
+    /*if (GET_LEVEL(ch) < com_msgs[subcmd].min_lev && GET_REMORT(ch) == 0) {
         sprintf(buf1, "Вам стоит достичь хотя бы %d уровня, чтобы Вы могли %s.\r\n",
                 com_msgs[subcmd].min_lev, com_msgs[subcmd].action);
         send_to_char(buf1, ch);
         return;
-    }
+    }*/
 
     /* make sure the char is on the channel */
     if (PRF_FLAGGED(ch, com_msgs[subcmd].noflag)) {

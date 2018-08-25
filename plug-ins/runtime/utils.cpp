@@ -4266,7 +4266,13 @@ void ShowMessage(struct char_data *ch,
         buf = rstring(mdam, toc, hit, tmp, tmp2, wname);
         if (ch != victim) {
             if (type != M_ARM)
-                send_to_char(CCIYEL(ch, C_CMP), ch);
+            {
+                if (dam < 1)
+                    send_to_char(CCYEL(ch, C_CMP), ch);
+                else
+                    send_to_char(CCIYEL(ch, C_CMP), ch);
+                
+            }
             if (PRF_FLAGGED(ch, PRF_CODERINFO))
                 sprintf(buf + strlen(buf), " [#1 ÈÐ]");
             del_spaces(buf);
@@ -4286,7 +4292,12 @@ void ShowMessage(struct char_data *ch,
     if (*tov) {
         buf = rstring(mdam, tov, hit, tmp, tmp2, wname);
         if (type != M_ARM)
-            send_to_char(CCIRED(victim, C_CMP), victim);
+        {
+            if (dam < 1)
+                send_to_char(CCRED(victim, C_CMP), victim);      
+            else
+                send_to_char(CCIRED(victim, C_CMP), victim);
+        }            
         if (PRF_FLAGGED(victim, PRF_CODERINFO))
             sprintf(buf + strlen(buf), " [#1 ÈÐ]");
         del_spaces(buf);
