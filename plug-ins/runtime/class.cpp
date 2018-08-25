@@ -393,6 +393,8 @@ int speedy(struct char_data * ch) {
     return (resul);
 };
 
+
+
 /* Роллинг статов */
 void roll_stat(struct char_data * ch) {
     char buf[MAX_STRING_LENGTH];
@@ -413,12 +415,18 @@ void roll_stat(struct char_data * ch) {
 /* Инициализация параметров игрока */
 void init_stats(struct char_data * ch) {
 //начальные статы
-    ch->real_abils.str   = race_ability[(int) GET_RACE(ch)][0];
+    /*ch->real_abils.str   = race_ability[(int) GET_RACE(ch)][0];
     ch->real_abils.con   = race_ability[(int) GET_RACE(ch)][1];
     ch->real_abils.dex   = race_ability[(int) GET_RACE(ch)][2];
     ch->real_abils.intel = race_ability[(int) GET_RACE(ch)][3];
     ch->real_abils.wis   = race_ability[(int) GET_RACE(ch)][4];
-    ch->real_abils.cha   = race_ability[(int) GET_RACE(ch)][5];
+    ch->real_abils.cha   = race_ability[(int) GET_RACE(ch)][5];*/
+    ch->real_abils.str   = max_roll[(int) GET_RACE(ch)][0];
+    ch->real_abils.con   = max_roll[(int) GET_RACE(ch)][1];
+    ch->real_abils.dex   = max_roll[(int) GET_RACE(ch)][2];
+    ch->real_abils.intel = max_roll[(int) GET_RACE(ch)][3];
+    ch->real_abils.wis   = max_roll[(int) GET_RACE(ch)][4];
+    ch->real_abils.cha   = max_roll[(int) GET_RACE(ch)][5];
     ch->real_abils.lck   = 5;
 
     switch (GET_RACE(ch)) {
