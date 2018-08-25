@@ -407,8 +407,8 @@ int get_next_extra_level_by_skill(int skill_value, int ext_skill_value)
 
 static void mprog_train_level(struct char_data *ch, struct char_data *teacher, int level)
 {
-	FENIA_VOID_CALL(ch, "TrainLevel", "Ci", teacher, level);
-    FENIA_PROTO_VOID_CALL(ch->npc(), "TrainLevel", "CCi", ch, teacher, level);
+	FENIA_VOID_CALL(teacher, "TrainLevel", "Ci", ch, level);
+    FENIA_PROTO_VOID_CALL(teacher->npc(), "TrainLevel", "CCi", teacher, ch, level);
 }
 
 #define SCMD_LEARN 1

@@ -4271,7 +4271,6 @@ void ShowMessage(struct char_data *ch,
                     send_to_char(CCYEL(ch, C_CMP), ch);
                 else
                     send_to_char(CCIYEL(ch, C_CMP), ch);
-                
             }
             if (PRF_FLAGGED(ch, PRF_CODERINFO))
                 sprintf(buf + strlen(buf), " [#1 ÈÐ]");
@@ -4294,7 +4293,7 @@ void ShowMessage(struct char_data *ch,
         if (type != M_ARM)
         {
             if (dam < 1)
-                send_to_char(CCRED(victim, C_CMP), victim);      
+                send_to_char(CCRED(victim, C_CMP), victim);
             else
                 send_to_char(CCIRED(victim, C_CMP), victim);
         }            
@@ -5859,12 +5858,18 @@ void ShowHitMessage(struct char_data *ch, struct char_data *victim, struct obj_d
         weapObj = body;
     if (missObj == NULL)
         missObj = body;
-
-    send_to_char(CCIYEL(ch, C_CMP), ch);
+    if (dam < 1)
+        send_to_char(CCYEL(ch, C_CMP), ch);    
+    else
+        send_to_char(CCIYEL(ch, C_CMP), ch);    
     act(to_char, "íÍÐÐÐÞ", ch, victim, weapObj, missObj, body, dam);
     send_to_char(CCNRM(ch, C_CMP), ch);
+   
+    if (dam < 1)
+        send_to_char(CCRED(victim, C_CMP), victim);      
+    else
+        send_to_char(CCIRED(victim, C_CMP), victim);
 
-    send_to_char(CCIRED(victim, C_CMP), victim);
     act(to_vict, "ÍíÐÐÐÞ", ch, victim, weapObj, missObj, body, dam);
     send_to_char(CCNRM(victim, C_CMP), victim);
 
@@ -6504,8 +6509,8 @@ double getPartyMobXPFull(int playerlvl, int highestlvl, int sumlvls, int moblvl,
 {
     double temp = getMobXPFull(highestlvl, moblvl, elite, 0);
 
-    if (playerlvl != sumlvls)   //ÉÇÒÏË × ÇÒÕÐÐÅ
-        temp = 1.5 * temp * playerlvl / sumlvls;
+    /*if (playerlvl != sumlvls)   //ÉÇÒÏË × ÇÒÕÐÐÅ
+        temp = 1.5 * temp * playerlvl / sumlvls;*/
 
     return temp;
 }

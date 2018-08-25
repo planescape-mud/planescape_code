@@ -679,7 +679,8 @@ void do_start(struct char_data * ch, int newbie) {
     ///////////////////////////////
 
     //if (!GET_LEVEL(ch) == 1) advance_level(ch);
-
+    GET_DR(ch) += 5;
+    GET_HR(ch) += 5;
     GET_HIT(ch)  = GET_REAL_MAX_HIT(ch);
     GET_MOVE(ch) = GET_REAL_MAX_MOVE(ch);
     GET_MANA(ch) = GET_REAL_MAX_MANA(ch);
