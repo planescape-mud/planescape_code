@@ -77,7 +77,7 @@ ValidateTask::run( )
                 LogStream::sendWarning( ) 
                     << "fenia fsck:  unreferenced function id:" 
                     << fi->getId() << endl;
-                freeList.push_back( Register( &*fi ) );
+		freeList.push_back( Register( new Closure(NULL, &*fi )) );
             }
 
     if (!freeList.empty( ))

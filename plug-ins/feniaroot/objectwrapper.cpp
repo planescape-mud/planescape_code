@@ -166,7 +166,7 @@ NMI_INVOKE( ObjectWrapper, create, "создать предмет с этим прототипом")
 {
     checkTarget();
     
-    obj_data *obj = read_object(target->item_number, REAL, TRUE);
+    obj_data *obj = read_object(target->item_number, REAL, true);
     return wrap(obj);
 }
 

@@ -22,7 +22,7 @@ public:
     
     inline void override( ValType value ) {
 	isOverriden = true;	
-	setValue( value );
+	this->setValue( value );
     }
     
     inline void fromXML( const XMLNode::Pointer& node ) throw( ExceptionBadType ) {
