@@ -1,4 +1,4 @@
-/* $Id: feniamanager.cpp,v 1.1.2.9.6.2 2007/09/11 00:01:14 margo Exp $
+/* $Id: feniamanager.cpp,v 1.1.2.9.6.3 2009/11/04 03:24:31 rufina Exp $
  *
  * ruffina, 2004
  */
@@ -51,7 +51,7 @@ FeniaManager::~FeniaManager()
     Class::unregMoc<RegListCall>( );
 
     if(current == this)
-	current = NULL;
+        current = NULL;
 
     thisClass = 0;
 }

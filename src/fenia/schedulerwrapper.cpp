@@ -1,4 +1,4 @@
-/* $Id: schedulerwrapper.cpp,v 1.1.2.5.6.2 2007/09/12 02:47:37 rufina Exp $
+/* $Id: schedulerwrapper.cpp,v 1.1.2.5.6.3 2009/11/04 03:24:31 rufina Exp $
  *
  * ruffina, 2004
  */
@@ -42,9 +42,6 @@ FeniaProcess::before()
     detach();
     speenup( );
 
-//    selfRef = self;
-    running = true;
-    
     scope = NULL;
     current = this;
 }
@@ -134,7 +131,11 @@ FeniaProcess::start()
 {
     selfRef = self;
     if(!running) {
-        run();
+        running = true; // don't start me twice
+        mux.lock(); // aquire the lock, so that the child thread wont do anything until we're in wait()
+        run(); // spawn a new thread
+        sync.wait(); // wait for a notification from the child
+        mux.unlock();
     }
 }
 

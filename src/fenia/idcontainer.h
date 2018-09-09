@@ -1,4 +1,4 @@
-/* $Id: idcontainer.h,v 1.1.2.2.18.1 2007/06/26 07:24:43 rufina Exp $
+/* $Id: idcontainer.h,v 1.1.2.2.18.2 2009/11/04 03:24:31 rufina Exp $
  *
  * ruffina, 2004
  */
