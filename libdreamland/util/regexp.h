@@ -1,4 +1,4 @@
-/* $Id: regexp.h,v 1.1.2.7.10.3 2009/10/11 18:35:37 rufina Exp $
+/* $Id: regexp.h,v 1.1.2.7.10.4 2011-04-19 01:20:38 rufina Exp $
  *
  * ruffina, Dream Land, 2003
  */
@@ -27,9 +27,9 @@ public:
     RegExp( const char *, bool );
     ~RegExp( );
 
-    bool match( const char * );
-    bool match( const DLString & );
-    MatchVector subexpr( const char * );
+    bool match( const char * ) const;
+    bool match( const DLString & ) const;
+    MatchVector subexpr( const char * ) const;
 
 private:
     void prepare( const char *, bool );

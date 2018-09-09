@@ -43,7 +43,7 @@ public:
 	{
 	}
 	
-	inline Date( const Date& newDate ) : time( 	time = newDate.time )
+	inline Date( const Date& newDate ) : time( newDate.time )
 	{
 	}
 

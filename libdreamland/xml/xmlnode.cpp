@@ -1,4 +1,4 @@
-/* $Id: xmlnode.cpp,v 1.8.34.3 2009/10/11 18:35:38 rufina Exp $
+/* $Id: xmlnode.cpp,v 1.8.34.4 2009/11/02 13:48:11 rufina Exp $
  *
  * ruffina, Dream Land, 2003
  */

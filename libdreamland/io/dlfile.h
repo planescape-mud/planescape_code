@@ -1,4 +1,4 @@
-/* $Id: dlfile.h,v 1.1.2.6 2009/10/11 18:35:36 rufina Exp $
+/* $Id: dlfile.h,v 1.1.2.7 2009/11/02 13:48:11 rufina Exp $
  *
  * ruffina, Dream Land, 2007
  */

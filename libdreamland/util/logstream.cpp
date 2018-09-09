@@ -1,4 +1,4 @@
-/* $Id: logstream.cpp,v 1.2.34.7 2009/10/11 18:35:37 rufina Exp $
+/* $Id: logstream.cpp,v 1.2.34.8 2009/11/02 13:48:11 rufina Exp $
  *
  * ruffina, Dream Land, 2003
  */

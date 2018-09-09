@@ -1,4 +1,4 @@
-/* $Id: guts.h,v 1.1.2.3.18.2 2007/09/11 00:09:28 margo Exp $
+/* $Id: guts.h,v 1.1.2.1 2009/11/04 03:24:31 rufina Exp $
  *
  * ruffina, 2004
  */

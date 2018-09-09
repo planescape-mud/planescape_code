@@ -23,6 +23,7 @@ namespace Scripting {
 
 #define ID_UNDEF    0
 #define ID_THIS	    1
+#define ID_ORIGIN   2 // parser's "this"
 #define ID_AUTO	    100
 
 class Lex : virtual public DLObject, public OneAllocate {

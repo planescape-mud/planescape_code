@@ -1,3 +1,7 @@
+/* $Id$
+ *
+ * ruffina, 2004
+ */
 /***************************************************************************
                           xmldocument.h  -  description
                              -------------------
@@ -61,6 +65,7 @@ public:
 	void save( ostream& ) const throw( ExceptionXMLError );
 	void load( istream& ) throw( ExceptionXMLError );
 private:
+        DLString encode(const DLString &) const;
 	void emit( const XMLNode &, ostream&, int, bool& ) const;
 	
 private:

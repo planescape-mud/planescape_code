@@ -1,4 +1,4 @@
-/* $Id: exception.cpp,v 1.2.4.5 2009/10/11 18:35:37 rufina Exp $
+/* $Id: exception.cpp,v 1.2.4.7 2014-09-19 11:41:34 rufina Exp $
  *
  * ruffina, Dream Land, 2004
  */
@@ -6,9 +6,10 @@
  * NoFate, 2001
  */
 #ifndef __MINGW32__ 
-#include <dlfcn.h>
+#include <execinfo.h>
 #endif
 #include <stdio.h>
+
 #include "exception.h"
 #include "exceptionbadtype.h"
 #include "fileformatexception.h"
@@ -36,20 +37,14 @@ Exception::setStr( const string& str )
 
 void Exception::fillStackFrames( void *a )
 {
-    void **bp;
-    
-    for(bp = &a - 3; ; bp = (void **)*bp) {
-	if(!*bp)
-	    return;
-	
-	if((char *)*bp <= (char *)bp)
-	    return;
-	
-	if((char *)*bp - (char *)bp > 0x10000)
-	    return;
+#ifndef __MINGW32__
+    void *stack[50];
+    size_t size;
 
-	callstack.push_back(bp[1]);
-    }
+    size = backtrace(stack, 50);
+
+    callstack.insert(callstack.end(), stack, stack+size);
+#endif
 }
 
 void Exception::printStackTrace( std::ostream &os ) const
@@ -61,18 +56,7 @@ void Exception::printStackTrace( std::ostream &os ) const
     for(it = callstack.begin( ); it != callstack.end( ); it++) {
 	void *ip = *it;
 
-	os << "  at ";
-#ifndef __MINGW32__ 
-	Dl_info info;
-	
-	if(dladdr(ip, &info)) 
-	    os  << info.dli_fname << '!' 
-		<< info.dli_sname << '+'
-		<< (char*)ip-(char*)info.dli_saddr 
-		<< std::endl;
-	else
-#endif            
-	    os  << ip << std::endl;
+	os << "  at " << ip << std::endl;
     }
 }
 

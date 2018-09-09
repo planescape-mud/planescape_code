@@ -7,8 +7,11 @@
  * unicorn, Forgotten Dungeon, 2004
  */
 
+#include "phase.h"
 
 namespace Scripting {
 bool gc = false;
+
+DereferenceListener *DereferenceListener::instance = 0;
 }
 

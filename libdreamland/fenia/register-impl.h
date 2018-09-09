@@ -18,6 +18,7 @@
 #include "register-decl.h"
 #include "feniastring.h"
 #include "reference.h"
+#include "closure.h"
 
 namespace Scripting {
     
@@ -60,10 +61,10 @@ Register::Register(const char *c)
 }
 
 inline
-Register::Register(Function *f) 
+Register::Register(Closure *c) 
 {
-    if(f) {
-	value.function = f;
+    if(c) {
+	value.function = c;
 	value.function->link();
 	type = FUNCTION;
     } else
@@ -160,7 +161,7 @@ Register::operator = (const char *r)
 
 inline
 const Register &
-Register::operator = (Function *r) 
+Register::operator = (Closure *r) 
 {
     set(r);
     return *this;
@@ -244,7 +245,7 @@ Register::release()
 
 inline
 void 
-Register::safeSet(Function *a) 
+Register::safeSet(Closure *a) 
 {
     value.function = a;
     type = FUNCTION; 
@@ -309,7 +310,7 @@ Register::set(const FeniaString &a) {
     
 inline
 void 
-Register::set(Function *a) { 
+Register::set(Closure *a) { 
     if(a) {
 	a->link();
 	release();
@@ -608,6 +609,23 @@ Register::toString() const
     }
 }
 
+inline DLString
+Register::repr() const
+{
+    switch(type) {
+        case NONE:
+            return DLString("null");
+        case OBJECT:
+            {
+                Handler::Pointer h = value.object->getHandler();
+                DLString htype = h ? h->getType() : "<offline>";
+                return DLString("OBJECT #") + DLString(value.object->getId()) + ": " + htype;
+            }
+        default:
+            return toString();
+    }
+}
+
 inline Object *
 Register::toObject() const
 {
@@ -617,7 +635,7 @@ Register::toObject() const
 	throw InvalidCastException("object", getTypeName());
 }
 
-inline Function *
+inline Closure *
 Register::toFunction() const
 {
     if(type == FUNCTION)

@@ -1,4 +1,4 @@
-/* $Id: xmlloader.cpp,v 1.1.2.5.6.4 2009/10/11 18:35:36 rufina Exp $
+/* $Id: xmlloader.cpp,v 1.1.2.5.6.5 2010-09-01 08:21:11 rufina Exp $
  *
  * ruffina, Dream Land, 2005
  */
@@ -20,11 +20,14 @@ XMLLoader::~XMLLoader( )
 {
 }
 
-bool XMLLoader::loadXML( XMLVariable *var, const DLString &name ) const 
+bool XMLLoader::loadXML( XMLVariable *var, const DLString &name, bool fIgnoreNotFound ) const 
 {
     try {
         DBIO dbio( getTablePath( ), getTableName( ) );
         dbio.open( );
+        
+        if (fIgnoreNotFound && !dbio.getEntryAsFile( name ).exist( )) 
+            return false;
 
 	DBIO::DBNode dbNode = dbio.select( name );
 	basic_istringstream<char> xmlStream( dbNode.getXML( ) );

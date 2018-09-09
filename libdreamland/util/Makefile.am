@@ -20,6 +20,7 @@ logstream.cpp \
 lastlogstream.cpp \
 parsedate.l++ \
 regexp.cpp \
+iconvmap.cpp \
 dl_match.cpp \
 dl_math.cpp \
 dl_strings.cpp \

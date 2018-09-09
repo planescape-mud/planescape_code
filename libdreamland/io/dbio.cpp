@@ -1,4 +1,4 @@
-/* $Id: dbio.cpp,v 1.12.2.2.30.4 2009/10/11 18:35:36 rufina Exp $
+/* $Id: dbio.cpp,v 1.12.2.2.30.5 2010-09-01 08:21:11 rufina Exp $
  *
  * ruffina, Dream Land, 2003
  */
@@ -66,8 +66,7 @@ void DBIO::safeInsert( const DBIO::DBNode &dbNode ) throw( ExceptionDBIO )
 
 void DBIO::insert( const DLString& key, const DLString& xml ) throw( ExceptionDBIO )
 {
-    DLFile entry( table, key, EXT_XML );
-    DLFileStream stream( entry );
+    DLFileStream stream( getEntryAsFile( key ) );
     stream.fromString( xml );
 }
 
@@ -78,14 +77,12 @@ void DBIO::safeInsert( const DLString& key, const DLString& xml ) throw( Excepti
 
     tmpStream.fromString( xml );
 
-    DLFile entry( table, key, EXT_XML );
-    tmpEntry.rename( entry );
+    tmpEntry.rename( getEntryAsFile( key ) );
 }
 	
 DBIO::DBNode DBIO::select( const DLString& key ) throw( ExceptionDBIO )
 {
-    DLFile entry( table, key, EXT_XML );
-    DLFileStream stream( entry );
+    DLFileStream stream( getEntryAsFile( key ) );
 
     std::basic_ostringstream<char> buf;
     stream.toStream( buf );
@@ -95,9 +92,7 @@ DBIO::DBNode DBIO::select( const DLString& key ) throw( ExceptionDBIO )
 
 void DBIO::remove( const DLString& key ) throw( ExceptionDBIO )
 {
-    DLFile entry( table, key, EXT_XML );
-    
-    if (!entry.remove( ))
+    if (!getEntryAsFile( key ).remove( ))
 	throw ExceptionDBIO( "Unable to delete '" + key + "'" );
 }
 
@@ -111,4 +106,8 @@ void DBIO::renameID( const DLString& oldKey, const DLString& newKey ) throw( Exc
 	throw ExceptionDBIO( "Unable to rename id '" + oldKey + "' to '" + newKey + "'" );
 }
 
+DLFile DBIO::getEntryAsFile( const DLString &key )
+{
+    return DLFile( table, key, EXT_XML );
+}
 

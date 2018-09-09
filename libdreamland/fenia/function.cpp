@@ -65,15 +65,11 @@ Function::reverse(ostream &os, const DLString &nextline) const
 }
 
 Register
-Function::invoke(Register thiz, RegisterList const &args)
+Function::invoke(Scope &sroot, Register thiz, RegisterList const &args)
 {
     if (!argNames || !stmts)
 	throw NullPointerException();
 
-    Register dummy(this);
-
-    CppScopeClobberRoot sroot;
-    
     RegisterList::const_iterator ali = args.begin();
     ArgNames::const_iterator ani = argNames->begin();
     

@@ -1,4 +1,4 @@
-/* $Id: guts.cpp,v 1.1.2.3.18.1 2007/06/26 07:13:10 rufina Exp $
+/* $Id: guts.cpp,v 1.1.2.1 2009/11/04 03:24:31 rufina Exp $
  *
  * ruffina, 2004
  */

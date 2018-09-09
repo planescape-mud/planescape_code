@@ -1,13 +1,11 @@
-/* $Id: object.cpp,v 1.1.2.9.6.4 2009/10/11 18:35:36 rufina Exp $
+/* $Id: object.cpp,v 1.1.2.9.6.6 2009/11/02 15:09:01 rufina Exp $
  *
- * ruffina, Dream Land, 2004
+ * ruffina, 2004
  */
-/* $Id: object.cpp,v 1.1.2.9.6.4 2009/10/11 18:35:36 rufina Exp $
+/* $Id: object.cpp,v 1.1.2.9.6.6 2009/11/02 15:09:01 rufina Exp $
  * 
  * unicorn, Forgotten Dungeon, 2004
  */
-
-#include <sys/time.h>
 
 #include <sstream>
 #include <fstream>
@@ -20,9 +18,6 @@
 #include "object.h"
 #include "context.h"
 #include "profiler.h"
-#include "timer.h"
-
-#undef FENIA_DEBUG
 
 namespace Scripting {
 
@@ -166,6 +161,19 @@ Object::Manager::Manager()
 
 Object::Manager::~Manager() 
 {
+    // Most handlers were backed up during plugin unload.
+    // But remaining handlers (e.g. FeniaProcess) may contain references to other objects.
+    // Clearing handlers will cause unlink operation on referenced objects.
+    // Clearing the manager's map will destroy objects in random order.
+    // We explicitely destroy all hanlders here first, while all objects are still intact, to prevent
+    // the memory corruption.
+    for(iterator i=begin();i!=end();i++) {
+        if(i->hasHandler()) {
+            i->handler->setSelf(0);
+            i->handler.clear( );
+        }
+    }
+
     Context::root = Register( );
     manager = 0;
 }
@@ -213,19 +221,16 @@ Object::Manager::put( id_t id, const string &s )
 }
 
 bool
-Object::Manager::tlim(const Timer *finishAt)
+Object::Manager::tlim(clock_t finishAt)
 {
-    Timer now;
-
     if(!finishAt)
 	return true;
 
-    now.update();
-    return now < *finishAt;
+    return clock( ) < finishAt;
 }
 
 bool
-Object::Manager::syncPut(const Timer *finishAt)
+Object::Manager::syncPut(clock_t finishAt)
 {
     Profiler prof;
     int cnt;
@@ -237,15 +242,30 @@ Object::Manager::syncPut(const Timer *finishAt)
 
     prof.stop();
 
-#ifdef FENIA_DEBUG
-    if(cnt > 0)
-	LogStream::sendNotice() << cnt << " objects synched (" << prof.msec( ) << " msec)." << endl;
-#endif
+    if(maxPut < prof.msec( ))
+        maxPut = prof.msec( );
+
     return changed.next == &changed;
 }
 
+DLString
+Object::Manager::stats()
+{
+    ostringstream os;
+
+    os  << "Max objects times (ms):" << endl
+        << "  sync:   " << maxPut << endl
+        << "  unlink: " << maxDel << endl
+        << "  commit: " << maxCommit << endl
+        << endl
+        << "Total objects: " << size() << endl;
+
+    return os.str();
+}
+
+
 bool
-Object::Manager::syncDel(const Timer *finishAt)
+Object::Manager::syncDel(clock_t finishAt)
 {
     Profiler prof;
     int cnt;
@@ -261,40 +281,30 @@ Object::Manager::syncDel(const Timer *finishAt)
     }
     
     prof.stop();
-#ifdef FENIA_DEBUG
-    if(cnt > 0)
-	LogStream::sendNotice() << cnt << " objects unlinked (" << prof.msec() << " msec)." << endl;
-#endif
+
+    if(maxDel < prof.msec( ))
+        maxDel = prof.msec( );
+
     return deleted.next == &deleted;
 }
 
 bool
-Object::Manager::sync(const Timer *tickEnd)
+Object::Manager::sync(clock_t tickEnd)
 {
-    Timer finishAt;
-
-#ifdef FENIA_DEBUG
-    LogStream::sendNotice() << "fenia sync: " << tickEnd << endl;
-#endif
     if(tickEnd) {
-	static const struct timeval gap = { 0, 40000 };
-        static const Timer gapTime(gap);
-        finishAt = *tickEnd - gap;
-	tickEnd = &finishAt;
+	tickEnd -= 40*CLOCKS_PER_SEC/1000; // 40ms gap for sure
     }
 
     bool consistent = syncPut(tickEnd) && syncDel(tickEnd);
-#ifdef FENIA_DEBUG
-    LogStream::sendNotice() << "fenia sync: " << tickEnd << ", consistent " << (consistent ? "yes":"no") << endl;
-#endif
+
     if(consistent && txnRunning( )) {
 	Profiler prof;
 	prof.start( );
 	commit( );
 	prof.stop();
-#ifdef FENIA_DEBUG
-	LogStream::sendNotice() << "commited (" << prof.msec() << " msec)." << endl;
-#endif
+
+        if(maxCommit < prof.msec( ))
+            maxCommit = prof.msec( );
     }
 
     return consistent;

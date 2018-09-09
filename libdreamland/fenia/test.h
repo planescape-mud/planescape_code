@@ -1,8 +1,8 @@
-/* $Id: test.h,v 1.1.4.6.6.2 2009/10/11 18:35:36 rufina Exp $
+/* $Id: test.h,v 1.1.4.6.6.3 2009/11/02 13:48:11 rufina Exp $
  *
  * ruffina, Dream Land, 2004
  */
-/* $Id: test.h,v 1.1.4.6.6.2 2009/10/11 18:35:36 rufina Exp $
+/* $Id: test.h,v 1.1.4.6.6.3 2009/11/02 13:48:11 rufina Exp $
  * 
  * unicorn, Forgotten Dungeon, 2004
  */

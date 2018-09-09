@@ -1,4 +1,4 @@
-/* $Id: reglist.cpp,v 1.1.2.4.6.1 2007/06/26 07:24:43 rufina Exp $
+/* $Id: reglist.cpp,v 1.1.2.4.6.2 2009/11/04 03:24:31 rufina Exp $
  *
  * ruffina, 2004
  */
@@ -80,7 +80,7 @@ NMI_INVOKE( RegList, forEach , "")
         throw Scripting::NotEnoughArgumentsException( );
 
     Register rfun = *ai++;
-    Function *fun = rfun.toFunction( );
+    Closure *fun = rfun.toFunction( );
     
     RegisterList av;
     

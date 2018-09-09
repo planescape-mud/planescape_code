@@ -1,3 +1,7 @@
+/* $Id$
+ *
+ * ruffina, 2004
+ */
 /***************************************************************************
                           xmlparser.h  -  description
                              -------------------
@@ -29,6 +33,8 @@ public:
 	
 private:
 	typedef std::stack<XMLNode::Pointer> StackType;
+
+        DLString decode(const DLString &) const;
 	
 	
 	XMLDocument::Pointer root;

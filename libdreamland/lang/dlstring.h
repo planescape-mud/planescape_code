@@ -1,4 +1,4 @@
-/* $Id: dlstring.h,v 1.27.2.13.6.8 2009/10/11 18:35:37 rufina Exp $
+/* $Id: dlstring.h,v 1.1.1.1 2011/05/03 12:55:19 rufina Exp $
  *
  * ruffina, Dream Land, 2004
  */
@@ -48,6 +48,11 @@ public:
 		assign( value );
 	}
 
+	inline DLString( long unsigned int value )
+	{
+		assign( value );
+	}
+
 	inline DLString( int value )
 	{
 		assign( value );
@@ -84,6 +89,7 @@ public:
 
 	DLString& assign( short );
 	DLString& assign( unsigned int );
+	DLString& assign( long unsigned int );
 	DLString& assign( int );
 	DLString& assign( long );
 	DLString& assign( long long );
@@ -108,6 +114,7 @@ public:
 
 	DLString& append( short );
 	DLString& append( unsigned int );
+	DLString& append( long unsigned int );
 	DLString& append( int );
 	DLString& append( long );
 	DLString& append( long long );
@@ -133,6 +140,11 @@ public:
 	}
 
 	inline DLString& operator = ( unsigned int value )
+	{
+		return assign( value );
+	}
+
+	inline DLString& operator = ( unsigned long int value )
 	{
 		return assign( value );
 	}
@@ -173,6 +185,11 @@ public:
 	}
 
 	inline DLString& operator += ( unsigned int value )
+	{
+		return append( value );
+	}
+
+	inline DLString& operator += ( long unsigned int value )
 	{
 		return append( value );
 	}
@@ -218,6 +235,11 @@ public:
 	}
 
 	inline DLString& operator << ( unsigned int value )
+	{
+		return append( value );
+	}
+
+	inline DLString& operator << ( unsigned long int value )
 	{
 		return append( value );
 	}
@@ -283,6 +305,7 @@ public:
 	bool lessCase( const DLString& str ) const;
 	
 	bool isNumber( ) const;
+	bool isRussian( ) const;
 	
 	/** убирает пробелы в начале и конце строки */
 	inline void stripWhiteSpace( )

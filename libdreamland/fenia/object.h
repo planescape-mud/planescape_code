@@ -1,8 +1,8 @@
-/* $Id: object.h,v 1.1.2.5.6.2 2009/10/11 18:35:36 rufina Exp $
+/* $Id: object.h,v 1.1.2.5.6.4 2009/11/02 15:09:01 rufina Exp $
  *
- * ruffina, Dream Land, 2004
+ * ruffina, 2004
  */
-/* $Id: object.h,v 1.1.2.5.6.2 2009/10/11 18:35:36 rufina Exp $
+/* $Id: object.h,v 1.1.2.5.6.4 2009/11/02 15:09:01 rufina Exp $
  * 
  * unicorn, Forgotten Dungeon, 2004
  */
@@ -11,7 +11,6 @@
 #define __OBJECT_H__
 
 #include <ext/rb_tree>
-#include <sys/time.h>
 
 using namespace __gnu_cxx;
 
@@ -28,13 +27,11 @@ using namespace __gnu_cxx;
 
 #define OBJID_ROOT 1
 
-class Timer;
-
 namespace Scripting {
 
 class Object : public XMLVariable {
 public:
-    typedef unsigned long int id_t;
+    typedef uint32_t id_t;
     struct selectId : public unary_function<Object, id_t> {
 	const id_t &operator () (const Object &o) {
 	    return o.getId();
@@ -89,6 +86,9 @@ public:
     }
     void unlink() {
 	refcnt--;
+
+        if(DereferenceListener::instance)
+            DereferenceListener::instance->notify(this);
 	
 	if(refcnt <= 0 && handler && Scripting::gc) 
 	    finalize();
@@ -125,10 +125,10 @@ public:
 
     virtual void seq( id_t, Data & );
 
-    bool tlim(const Timer *);
-    bool syncPut(const Timer *);
-    bool syncDel(const Timer *);
-    bool sync(const Timer *);
+    bool tlim(clock_t );
+    bool syncPut(clock_t );
+    bool syncDel(clock_t );
+    bool sync(clock_t );
 
     void backup();
     void recover();
@@ -136,6 +136,11 @@ public:
     Object & allocate();
 
     Object changed, deleted;
+
+
+    DLString stats();
+
+    long maxPut, maxDel, maxCommit;
 };
 
 }

@@ -1,4 +1,4 @@
-/* $Id: globalregistry.h,v 1.1.2.3 2009/10/11 18:35:36 rufina Exp $
+/* $Id: globalregistry.h,v 1.1.2.5 2010-09-05 13:57:11 rufina Exp $
  *
  * ruffina, Dream Land, 2006
  */
@@ -24,8 +24,8 @@ public:
     
     int lookup( const DLString & );
     const DLString & getName( int ) const;
-    bool goodIndex( int ) const;
-    int size( ) const;
+    inline bool goodIndex( int ) const;
+    inline int size( ) const;
     void outputAll( ostringstream &, int, int ) const;
     
     template <typename Comparator>
@@ -63,12 +63,16 @@ public:
 
     Elem * findExisting( const DLString &name )
     {
-	Indexes::iterator iter = indexes.find( name );
-
-	if (iter != indexes.end( )) 
-	    return find( iter->second );
-	else
+	unsigned int i;
+	
+	if (name.empty( ))
 	    return NULL;
+	    
+	for (i = 0; i < table.size( ); i++) 
+	    if (table[i]->matchesStrict( name ))
+		return (Elem *)*table[i];
+
+	return NULL;
     }
 
     Elem * findUnstrict( const DLString &name )
@@ -96,6 +100,16 @@ inline void GlobalRegistryBase::sortIndexes( SortedIndexes &order, Comparator co
         order.push_back( t );
 
     order.sort( comparator );
+}
+
+inline bool GlobalRegistryBase::goodIndex( int n ) const
+{
+    return (n >= 0 && n < (int) table.size( ));
+}
+
+inline int GlobalRegistryBase::size( ) const
+{
+    return table.size( );
 }
 
 #endif

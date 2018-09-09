@@ -1,4 +1,4 @@
-/* $Id: russianstring.cpp,v 1.1.2.6 2009/10/11 18:35:37 rufina Exp $
+/* $Id: russianstring.cpp,v 1.1.2.7 2009/11/08 17:33:28 rufina Exp $
  *
  * ruffina, Dream Land, 2007
  */
@@ -8,13 +8,12 @@
 using namespace Grammar;
 
 RussianString::RussianString()
-                  : mg(MultiGender::NONE)
 {
     fillCachedForms();
 }
 
 RussianString::RussianString(const DLString &ff)
-                  : fullForm(ff), mg(MultiGender::NONE)
+                  : fullForm(ff)
 {
     fillCachedForms();
 }

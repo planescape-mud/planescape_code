@@ -1,4 +1,4 @@
-/* $Id: stringset.h,v 1.1.2.2 2009/10/11 18:35:37 rufina Exp $
+/* $Id: stringset.h,v 1.1.2.3 2011-04-17 19:37:54 rufina Exp $
  *
  * ruffina, Dream Land, 2004
  */
@@ -10,9 +10,14 @@
 
 class StringSet : public std::set<DLString> {
 public:
-
     DLString toString( ) const;
-    void fromString( const DLString & );
+    StringSet & fromString( const DLString & );
+};
+
+class NumberSet : public std::set<int> {
+public:
+    void fromStringSet( const StringSet & );
+    StringSet toStringSet( ) const;
 };
 
 #endif

@@ -13,6 +13,7 @@
 #include <list>
 
 #include <dlstring.h>
+#include <pointer.h>
 
 #include "lex.h"
 #include "handler.h"
@@ -21,7 +22,7 @@ namespace Scripting {
 
 class Reference;
 class Object;
-class Function;
+class Closure;
 class FeniaString;
 
 class Register {
@@ -32,7 +33,7 @@ public:
     inline Register(const DLString &s);
     inline Register(const string &s);
     inline Register(const char *c);
-    inline Register(Function *f);
+    inline Register(Closure *c);
     inline Register(Object *o);
     inline Register(const Register &r);
     template <typename T> 
@@ -43,7 +44,7 @@ public:
     inline const Register &operator = (Lex::id_t r);
     inline const Register &operator = (const DLString &r);
     inline const Register &operator = (const char *r);
-    inline const Register &operator = (Function *r);
+    inline const Register &operator = (Closure *c);
     inline const Register &operator = (Object *r);
     inline const Register &operator = (const Register &r);
 
@@ -75,9 +76,11 @@ public:
     inline Lex::id_t toIdentifier() const;
     inline DLString toString() const;
     inline Object *toObject() const;
-    inline Function *toFunction() const;
+    inline Closure *toFunction() const;
     inline Handler::Pointer toHandler() const ;
     inline bool toBoolean() const ;
+
+    inline DLString repr() const;
 
     enum /*Type*/ {
 	NONE,
@@ -103,7 +106,7 @@ public:
     union {
 	int number;
 	Lex::id_t identifier;
-	Function *function;
+	Closure *function;
 	Object *object;
 	char aux[sizeof(DLString)];   /*XXX: actualy, FeniaString*/
     } value;
@@ -117,7 +120,7 @@ private:
 
 protected:
     inline void release();
-    inline void safeSet(Function *a);
+    inline void safeSet(Closure *a);
     inline void safeSet(Object *a);
     inline void safeSet(const FeniaString &a);
     inline void safeSet(int a);
@@ -127,7 +130,7 @@ protected:
     inline void set(Lex::id_t a);
     inline void set(const FeniaString &a);
     inline void set(Object *a);
-    inline void set(Function *a);
+    inline void set(Closure *a);
 };
 
 class RegisterList : public std::list<Register> { };

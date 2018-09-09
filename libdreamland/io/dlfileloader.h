@@ -1,3 +1,7 @@
+/* $Id$
+ *
+ * ruffina, 2004
+ */
 #ifndef DLFILELOADER_H
 #define DLFILELOADER_H
 

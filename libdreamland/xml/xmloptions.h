@@ -15,7 +15,6 @@ class XMLOption : public ParentType {
 public:	
     using ParentType::fromXML;
     using ParentType::getValue;
-    using ParentType::setValue;
     
     XMLOption( ) : isOverriden( false )
     {
@@ -23,7 +22,7 @@ public:
     
     inline void override( ValType value ) {
 	isOverriden = true;	
-	setValue( value );
+	this->setValue( value );
     }
     
     inline void fromXML( const XMLNode::Pointer& node ) throw( ExceptionBadType ) {

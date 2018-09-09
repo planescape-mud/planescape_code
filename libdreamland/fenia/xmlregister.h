@@ -12,10 +12,12 @@
 
 #include <xmlpolymorphvariable.h>
 #include <xmlinteger.h>
+#include <xmlmap.h>
 #include <xmlvariablecontainer.h>
 
 // MOC_SKIP_BEGIN
 #include "register-decl.h"
+#include "register-impl.h"
 // MOC_SKIP_END
 
 namespace Scripting {
@@ -50,6 +52,7 @@ class XMLFunctionRef : public XMLVariableContainer {
 XML_OBJECT
 public:
     XML_VARIABLE XMLInteger codesource, function;
+    XML_VARIABLE XMLMapBase<XMLRegister> environment;
 };
 
 }

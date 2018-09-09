@@ -1,4 +1,4 @@
-/* $Id: txncontext.cpp,v 1.1.6.2 2009/10/11 18:35:36 rufina Exp $
+/* $Id: txncontext.cpp,v 1.1.6.3 2010-01-01 15:14:15 rufina Exp $
  *
  * ruffina, Dream Land, 2005
  */

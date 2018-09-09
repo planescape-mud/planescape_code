@@ -1,4 +1,4 @@
-/* $Id: pronouns.cpp,v 1.1.2.4 2009/10/11 18:35:37 rufina Exp $
+/* $Id: pronouns.cpp,v 1.1.2.5 2010-09-01 21:20:47 rufina Exp $
  *
  * ruffina, Dream Land, 2007
  */
@@ -7,7 +7,13 @@
 
 using namespace Grammar;
 
+const Pronoun::Persons Pronoun::emptyPersons = { {""} };
+
 Pronoun::~Pronoun()
+{
+}
+
+PersonalPronoun::PersonalPronoun() : persons(Pronoun::emptyPersons)
 {
 }
 
@@ -18,6 +24,12 @@ PersonalPronoun::~PersonalPronoun()
 DLString PersonalPronoun::decline(const Noun &who, const Person &p, const Case &c) const 
 {
     return persons [Person(who.getMultiGender(), p)] [c];
+}
+
+const PosessivePronoun::PosessionGenders PosessivePronoun::emptyPosessions = { { { "" } } };
+
+PosessivePronoun::PosessivePronoun() : posessions(PosessivePronoun::emptyPosessions)
+{
 }
 
 PosessivePronoun::~PosessivePronoun()

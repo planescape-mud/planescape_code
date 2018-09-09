@@ -49,8 +49,7 @@ XMLRegister::toXML( XMLNode::Pointer& parent) const
 	
 	parent->setType(XMLNode::XML_NODE);
 	parent->insertAttribute(ATTRIBUTE_REGTYPE, REGTYPE_FUNCTION);
-	ref.codesource = value.function->source.source->getId();
-	ref.function = value.function->getId();
+        value.function->toXMLFunctionRef(ref);
 
 	ref.toXML(parent);
 	return true;
@@ -104,7 +103,7 @@ XMLRegister::fromXML( const XMLNode::Pointer& parent) throw( ExceptionBadType )
     } else if(regtype == REGTYPE_FUNCTION) {
 	XMLFunctionRef ref;
 	ref.fromXML(parent);
-	Register::set( &CodeSource::manager->at(ref.codesource).functions.at(ref.function) );
+	Register::set(new Closure(ref));
 	return;
     }
     

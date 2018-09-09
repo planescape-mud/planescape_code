@@ -1,3 +1,7 @@
+/* $Id$
+ *
+ * ruffina, 2004
+ */
 #ifndef CONFIG_IO_H
 #define CONFIG_IO_H
 

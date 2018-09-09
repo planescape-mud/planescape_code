@@ -67,7 +67,7 @@ public:
     
         // Complain about exception to every immortal in the game.    
         if (triggerFunction(key, prog)) {
-            const CodeSource::Pointer &codeSource = prog.toFunction()->source.source;
+            const CodeSource::Pointer &codeSource = prog.toFunction()->getFunction()->source.source;
             fenia_wiznet(codeSource, key.toString(), e.what());
         }
         

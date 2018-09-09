@@ -124,6 +124,8 @@ void PlaneScape::loop()
      * The Main Loop.  The Big Cheese.  The Top Dog.  The Head Honcho.  The.. 
      */
     while (!isShutdown()) {	
+	pulseStartTime = clock();
+
 	/* 
 	 * Game scheduler runs
 	 */
@@ -210,6 +212,7 @@ void PlaneScape::setOptTime()
 void PlaneScape::sleepUp()
 {
     Timer before_sleep, now, timeout;
+    clock_t pulseEnd;
 
     /*
      * At this point, we have completed all input, output and heartbeat
@@ -219,6 +222,7 @@ void PlaneScape::sleepUp()
      */
     before_sleep.update(); /* current time */
     process_time = before_sleep - last_time;
+    pulseEnd = pulseStartTime + CLOCKS_PER_SEC / pulsePerSecond;
 
     /*
      * If we were asleep for more than one pass, count missed pulses and sleep
@@ -234,10 +238,11 @@ void PlaneScape::sleepUp()
     timeout = last_time - now;
 
     if (missed_pulses == 1) {
-        Scripting::Object::manager->sync(&last_time);
+        Scripting::Object::manager->sync(pulseEnd);
 
         now.update();
         timeout = last_time - now;
+	//LogStream::sendNotice() << "clock_t=" << 1000*(pulseEnd-clock())/CLOCKS_PER_SEC << ", timer=" << timeout.toLong() / 1000 << endl;
     }
 
     /* Go to sleep */

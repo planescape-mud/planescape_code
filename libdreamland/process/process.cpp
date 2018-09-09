@@ -49,10 +49,11 @@ ProcessManager::RoundRobinElement::speenup( )
 #ifdef PDEBUG
     LogStream::sendError( ) << "speenup" << endl;
 #endif
-    mux.lock( );
+    mux.lock( ); // stuck in here until parent enters sync.wait();
     fromlist( );
-    tolist(getThis( )->running);    
-    sync.wait( );
+    tolist(getThis( )->running);
+    sync.notify( ); // notify the parent thread that we have aquired the lock and ready
+    sync.wait( ); // give up the mux and wait for the first yield. mux will be re-aquired when yield received
 #ifdef PDEBUG
     LogStream::sendError( ) << "speenup - done" << endl;
 #endif

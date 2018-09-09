@@ -1,8 +1,8 @@
-/* $Id: feniaparser.h,v 1.4.2.4.6.3 2009/10/11 18:35:35 rufina Exp $
+/* $Id: feniaparser.h,v 1.4.2.4.6.4 2010-09-01 21:20:47 rufina Exp $
  *
  * ruffina, Dream Land, 2004
  */
-/* $Id: feniaparser.h,v 1.4.2.4.6.3 2009/10/11 18:35:35 rufina Exp $
+/* $Id: feniaparser.h,v 1.4.2.4.6.4 2010-09-01 21:20:47 rufina Exp $
  * 
  * unicorn, Forgotten Dungeon, 2004
  */
@@ -32,7 +32,6 @@ struct SValue {
     ExpNodeList::Pointer exps;
     StmtNodeList::Pointer stmts;
     ArgNames::Pointer args;
-    CodeSourceRef csrc;
     
     DLString str;
     Lex::id_t id;
@@ -42,6 +41,7 @@ struct SValue {
 class FeniaParser : public yyFlexLexer {
     friend int yyparse(void *dummy, FeniaParser *parser);
     friend int yyparse();
+    friend CodeSourceRef csrc();
     CodeSource &source;
     ExpNode::Pointer input;
     std::basic_ostringstream<char> ostr;
@@ -54,10 +54,9 @@ public:
 
 protected:
     int lex( SValue * );
-    void error( char* message );
+    void error( const char* message );
     int parse( ); 
 };
 
 extern FeniaParser *parser;
-
 #endif /* __FENIAPARSER_H__ */

@@ -16,6 +16,7 @@ public:
     using std::vector<T>::begin;
     using std::vector<T>::at;
     using std::vector<T>::push_back;
+    using std::vector<T>::erase;
 
     virtual void fromXML( const XMLNode::Pointer& node ) throw( ExceptionBadType )
     {

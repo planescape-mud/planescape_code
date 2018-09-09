@@ -1,4 +1,4 @@
-/* $Id: reglist.h,v 1.1.2.2.18.1 2007/06/26 07:24:43 rufina Exp $
+/* $Id: reglist.h,v 1.1.2.2.18.2 2009/11/04 03:24:31 rufina Exp $
  *
  * ruffina, 2004
  */
@@ -23,7 +23,7 @@ using Scripting::Register;
 using Scripting::RegisterList;
 
 class XMLRegisterList : public std::list<XMLRegister>,
-                        public virtual XMLContainer 
+			public virtual XMLContainer 
 {
 public:
     virtual bool nodeFromXML( const XMLNode::Pointer& node );
@@ -32,8 +32,8 @@ public:
 };
 
 class RegList : public XMLRegisterList,
-                public Scripting::NativeHandler,
-                public Scripting::NativeImpl<RegList>
+		public Scripting::NativeHandler,
+		public Scripting::NativeImpl<RegList>
 {
 NMI_OBJECT
 public:
