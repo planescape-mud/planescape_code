@@ -41,15 +41,16 @@ main(int argc, char **argv)
 	cout << "sizeof(r): " << sizeof(r) << endl; 
 	cs.name = "test";
 	cs.author = "root";
-	cs.content = "\"2+2\"";
+	cs.content = "function() { var x, y; x = 42; y = function() { return x; }; return y; }";
+	//cs.content = "\"???\"";
 	Register rc = cs.eval( );
-	std::cout << rc.toString() << endl;
 	
 	RegisterList ol;
 //	struct timeval tv1, tv2;
 //	gettimeofday(&tv1, NULL);
 	rc = rc.toFunction()->invoke(Register(), ol);
 //	gettimeofday(&tv2, NULL);
+	std::cout << rc.toString() << endl;
 /*	
 	long long l;
 	l = tv2.tv_sec - tv1.tv_sec;

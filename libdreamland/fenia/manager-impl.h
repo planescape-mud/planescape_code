@@ -1,8 +1,8 @@
-/* $Id: manager-impl.h,v 1.1.4.5.6.3 2009/10/11 18:35:36 rufina Exp $
+/* $Id: manager-impl.h,v 1.1.4.5.6.4 2010-01-01 15:14:15 rufina Exp $
  *
  * ruffina, Dream Land, 2004
  */
-/* $Id: manager-impl.h,v 1.1.4.5.6.3 2009/10/11 18:35:36 rufina Exp $
+/* $Id: manager-impl.h,v 1.1.4.5.6.4 2010-01-01 15:14:15 rufina Exp $
  * 
  * unicorn, Forgotten Dungeon, 2004
  */

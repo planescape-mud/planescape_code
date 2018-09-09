@@ -38,6 +38,7 @@ stmt-tree.cpp \
 xmlregister.cpp \
 exceptions.cpp \
 feniastring.cpp \
+closure.cpp \
 native.cpp
 
 libfenia_la_MOC = xmlregister.h 

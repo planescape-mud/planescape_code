@@ -10,6 +10,18 @@
 #define __PHASE_H__
 
 namespace Scripting {
+
+class Function;
+class Object;
+
+class DereferenceListener {
+public:
+    virtual void notify(Function *) = 0;
+    virtual void notify(Object *) = 0;
+
+    static DereferenceListener *instance;
+};
+
 extern bool gc;
 }
 

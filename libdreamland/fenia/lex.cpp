@@ -47,6 +47,8 @@ Lex::getThis()
 	/*XXX - ?*/
 	self->id2str[ID_THIS] = "this";
 	self->str2id["this"] = ID_THIS;
+	self->id2str[ID_ORIGIN] = "origin";
+	self->str2id["origin"] = ID_ORIGIN;
     }
     
     return self;

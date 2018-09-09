@@ -19,6 +19,7 @@ using namespace __gnu_cxx;
 #include <dlstring.h>
 #include <xmlvariable.h>
 #include <xmlvector.h>
+#include <stdint.h>
 
 #include "codesourceref.h"
 #include "lex.h"
@@ -30,6 +31,7 @@ using namespace __gnu_cxx;
 namespace Scripting {
 
 class RegisterList;
+class Scope;
 
 class ArgNames : public vector<Lex::id_t>, public DLObject {
 public:
@@ -37,9 +39,9 @@ public:
 };
 
 
-class Function : public DLObject {
+class Function {
 public:
-    typedef unsigned long int id_t;
+    typedef uint32_t id_t;
 
     struct selectId : public unary_function<Function, id_t> {
 	const id_t &operator () (const Function &f) {
@@ -55,7 +57,7 @@ public:
 	return id;
     }
 
-    Register invoke(Register thiz, const RegisterList &args);
+    Register invoke(Scope &scope, Register thiz, const RegisterList &args);
     
     ArgNames::Pointer argNames;
     StmtNodeList::Pointer stmts;
@@ -72,6 +74,10 @@ public:
     }
     void unlink() {
 	refcnt--;
+
+        if(DereferenceListener::instance)
+            DereferenceListener::instance->notify(this);
+
 	if(refcnt <= 0 && Scripting::gc) {
 	    finalize();
 	}

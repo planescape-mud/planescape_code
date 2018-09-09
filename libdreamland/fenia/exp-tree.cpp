@@ -14,6 +14,7 @@ using namespace std;
 #include "exp-tree.h"
 #include "reference-impl.h"
 #include "register-impl.h"
+#include "logstream.h"
 
 namespace Scripting {
 
@@ -137,6 +138,42 @@ ConstantExp::reverse(ostream &os, const DLString &nextline) const
     os << "{x";    
 }
 
+
+ClosureExp::ClosureExp(Function *f) : function(f) 
+{
+    function->link();
+}
+
+ClosureExp::~ClosureExp( )
+{
+    function->unlink();
+}
+
+Register
+ClosureExp::evalAux() 
+{
+    return Register(new Closure(NULL, function));
+}
+
+void 
+ClosureExp::reverse(ostream &os, const DLString &nextline) const
+{
+    os << "{M";
+    
+    function->reverse(os, nextline);
+
+    os << "{x";    
+}
+
+LambdaExp::LambdaExp(Function *f) : ClosureExp(f)
+{
+}
+
+Register
+LambdaExp::evalAux() 
+{
+    return Register(new Closure(Context::current->scope, function));
+}
 
 CallExp::CallExp( ) 
 {

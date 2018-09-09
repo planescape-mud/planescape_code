@@ -61,6 +61,28 @@ public:
     Register object;
 };
 
+class ClosureExp : public ExpNode {
+public:
+    typedef ::Pointer<ClosureExp> Pointer;
+    
+    ClosureExp(Function *f);
+    virtual ~ClosureExp();
+
+    virtual Register evalAux();
+    virtual void reverse(ostream &os, const DLString &nextline) const;
+
+    Function *function;
+};
+
+class LambdaExp : public ClosureExp {
+public:
+    typedef ::Pointer<LambdaExp> Pointer;
+
+    LambdaExp(Function *f);
+
+    virtual Register evalAux();
+};
+
 
 class CallExp : public ExpNode {
 public:

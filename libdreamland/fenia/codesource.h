@@ -10,6 +10,7 @@
 #define __CODESOURCE_H__
 
 #include <ext/rb_tree>
+#include <stdint.h>
 
 using namespace __gnu_cxx;
 
@@ -27,7 +28,7 @@ class CodeSource {
 public:
     typedef ::Pointer<CodeSource> Pointer;
 
-    typedef unsigned long int id_t;
+    typedef uint32_t id_t;
     struct selectId : public unary_function<CodeSource, id_t> {
 	const id_t &operator () (const CodeSource &f) {
 	    return f.getId();

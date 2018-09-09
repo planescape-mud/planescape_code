@@ -10,7 +10,7 @@
 #ifndef __SCOPE_H__
 #define __SCOPE_H__
 
-#include "register-impl.h"
+#include "register-decl.h"
 #include "context.h"
 
 namespace Scripting {

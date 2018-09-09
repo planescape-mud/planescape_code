@@ -1,3 +1,12 @@
+/* $Id$
+ *
+ * ruffina, Dream Land, 2004
+ */
+/* $Id$
+ * 
+ * unicorn, Forgotten Dungeon, 2004
+ */
+
 #include "native.h"
 #include "register-impl.h"
 
