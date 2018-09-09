@@ -1,4 +1,4 @@
-/* $Id: globalregistryelement.h,v 1.1.2.3 2009/10/11 18:35:36 rufina Exp $
+/* $Id: globalregistryelement.h,v 1.1.2.4 2009/11/08 17:34:01 rufina Exp $
  *
  * ruffina, Dream Land, 2006
  */
@@ -13,27 +13,14 @@ friend class GlobalRegistryBase;
 public:
     typedef ::Pointer<GlobalRegistryElement> Pointer;
     
-    GlobalRegistryElement( ) : index( -1 )
-    {
-    }
+    GlobalRegistryElement( );
+    virtual ~GlobalRegistryElement( );
     
     virtual const DLString &getName( ) const = 0;
+    virtual const DLString &getRussianName( ) const;
     
-    virtual bool matchesStrict( const DLString &str ) const 
-    {
-	return !str.empty( ) && str == getName( );
-    }
-
-    virtual bool matchesUnstrict( const DLString &str ) const 
-    {
-	if (str.empty( ) || getName( ).empty( ))
-	    return false;
-
-	if (!str.strPrefix( getName( ) ))
-	    return false;
-
-	return true;
-    }
+    virtual bool matchesStrict( const DLString &str ) const;
+    virtual bool matchesUnstrict( const DLString &str ) const;
 
     inline int getIndex( ) const
     {

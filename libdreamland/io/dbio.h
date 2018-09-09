@@ -1,4 +1,4 @@
-/* $Id: dbio.h,v 1.13.2.2.28.4 2009/10/11 18:35:36 rufina Exp $
+/* $Id: dbio.h,v 1.13.2.2.28.5 2010-09-01 08:21:11 rufina Exp $
  *
  * ruffina, Dream Land, 2003
  */
@@ -74,6 +74,7 @@ public:
 	DBNode select( const DLString& ) throw( ExceptionDBIO );
 	void remove( const DLString& ) throw( ExceptionDBIO );
 	void renameID( const DLString& oldKey, const DLString& newKey ) throw( ExceptionDBIO );
+        DLFile getEntryAsFile( const DLString &key );
 
 private:
 	DLDirectory table;

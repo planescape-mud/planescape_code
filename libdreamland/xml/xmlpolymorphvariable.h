@@ -60,7 +60,6 @@ public:
     using Ptr::clear;
     using Ptr::isEmpty;
     using Ptr::getPointer;
-    using Ptr::setPointer;
 
     XMLPolymorphPointer() : Ptr() { }
     XMLPolymorphPointer(const Ptr &p) : Ptr(p) { }
@@ -89,7 +88,7 @@ public:
 	    try {
 		AllocateClass::Pointer p = Class::allocateClass( type );
 			
-		setPointer( dynamic_cast<T *>( p.getPointer( ) ) );
+                this->setPointer( dynamic_cast<T *>( p.getPointer( ) ) );
 
 		if (isEmpty( ))
 		    throw ExceptionXMLClassNotDerived( typeid( this ).name( ), type );

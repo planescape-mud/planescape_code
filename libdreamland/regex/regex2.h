@@ -38,6 +38,8 @@
  * $FreeBSD: src/lib/libc/regex/regex2.h,v 1.8 2004/07/12 07:35:59 tjr Exp $
  */
 
+#include <wctype.h>
+
 /*
  * First, the stuff that ends up in the outside-world include file
  = typedef off_t regoff_t;

@@ -1,4 +1,4 @@
-/* $Id: xmlrussianstring.cpp,v 1.1.2.3 2009/10/11 18:35:37 rufina Exp $
+/* $Id: xmlrussianstring.cpp,v 1.1.2.5 2009/11/08 17:33:28 rufina Exp $
  *
  * ruffina, Dream Land, 2007
  */
@@ -14,7 +14,8 @@ void XMLRussianString::fromXML( const XMLNode::Pointer& parent ) throw( Exceptio
 {
     XMLNode::Pointer node = parent->getFirstNode( );
     
-    mg = MultiGender(parent->getAttribute( ATTRIBUTE_GRAMMAR ).c_str());
+    if (parent->hasAttribute( ATTRIBUTE_GRAMMAR ))
+	mg = MultiGender(parent->getAttribute( ATTRIBUTE_GRAMMAR ).c_str());
 
     if (!node.isEmpty( )) 
 	setFullForm(node->getCData( ));
@@ -27,7 +28,9 @@ bool XMLRussianString::toXML( XMLNode::Pointer& parent ) const
     node->setType( XMLNode::XML_TEXT );
     node->setCData( getFullForm() );
     
-    parent->insertAttribute( ATTRIBUTE_GRAMMAR, mg.toString() );
+    if (mg != MultiGender::MASCULINE)
+	parent->insertAttribute( ATTRIBUTE_GRAMMAR, mg.toString() );
+
     parent->appendChild( node );
     return true;
 }

@@ -32,6 +32,7 @@ public:
     using List::pop_back;
     using List::begin;
     using List::end;
+    using List::erase;
 
     inline iterator erase_delete( iterator, iterator );
     inline void pop_back_delete( );

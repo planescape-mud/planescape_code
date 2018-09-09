@@ -1,4 +1,4 @@
-/* $Id: regexp.cpp,v 1.1.2.8.10.3 2009/10/11 18:35:37 rufina Exp $
+/* $Id: regexp.cpp,v 1.1.2.8.10.4 2011-04-19 01:20:38 rufina Exp $
  *
  * ruffina, Dream Land, 2003
  */
@@ -40,19 +40,19 @@ RegExp::~RegExp( )
     regfree(&preg);
 }
 
-bool RegExp::match( const DLString &str )
+bool RegExp::match( const DLString &str ) const
 {
     return match( str.c_str( ) );
 }
 
-bool RegExp::match(  const char *str) 
+bool RegExp::match(  const char *str)  const
 {
     regmatch_t pmatch[256];
     
     return !regexec(&preg, str, 0, pmatch, 0);
 }
 
-RegExp::MatchVector RegExp::subexpr( const char *str ) 
+RegExp::MatchVector RegExp::subexpr( const char *str ) const
 {
     int errcode;
     size_t nmatch = preg.re_nsub + 1;

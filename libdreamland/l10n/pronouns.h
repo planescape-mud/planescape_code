@@ -1,4 +1,4 @@
-/* $Id: pronouns.h,v 1.1.2.3 2009/10/11 18:35:37 rufina Exp $
+/* $Id: pronouns.h,v 1.1.2.4 2010-09-01 21:20:47 rufina Exp $
  *
  * ruffina, Dream Land, 2007
  */
@@ -17,13 +17,15 @@ class Pronoun {
 public:    
     typedef const char * Cases [Case::MAX];
     typedef Cases Persons [Person::MAX];
-
+    static const Persons emptyPersons;
+    
     virtual ~Pronoun();
 };
 
 // (кто? кого? кому?)
 class PersonalPronoun : public Pronoun {
 public:    
+    PersonalPronoun();
     virtual ~PersonalPronoun();
 
     DLString decline(const Noun &who, const Person &p, const Case &c) const;
@@ -36,7 +38,9 @@ private:
 class PosessivePronoun : public Pronoun {
 public:    
     typedef Persons PosessionGenders [MultiGender::MAX];
-
+    static const PosessionGenders emptyPosessions;
+    
+    PosessivePronoun();
     virtual ~PosessivePronoun();
 
     DLString decline(const Noun &item, const Noun &owner, const Person &p, const Case &c) const;

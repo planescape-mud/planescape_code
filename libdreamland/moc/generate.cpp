@@ -1,4 +1,4 @@
-/* $Id: generate.cpp,v 1.27.2.4.8.2 2007/09/29 19:22:21 margo Exp $
+/* $Id: generate.cpp,v 1.27.2.4.8.2 2007/09/29 19:22:21 rufina Exp $
  *
  * ruffina, 2004
  * rewritten... twice

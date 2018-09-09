@@ -1,4 +1,4 @@
-/* $Id: dldirectory.cpp,v 1.1.2.5 2009/10/11 18:35:36 rufina Exp $
+/* $Id: dldirectory.cpp,v 1.1.2.7 2014-09-19 11:45:55 rufina Exp $
  *
  * ruffina, Dream Land, 2007
  */
@@ -65,6 +65,7 @@ DLFile DLDirectory::nextEntry( ) throw( ExceptionDBIOEOF )
 	throw ExceptionDBIO( "Directory '" + path + "' already closed" );
 
     dirent *dp = readdir( dirp );
+
 
     if (dp == 0) {
 	close( );

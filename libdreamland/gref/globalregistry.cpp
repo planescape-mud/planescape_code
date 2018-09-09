@@ -1,4 +1,4 @@
-/* $Id: globalregistry.cpp,v 1.1.2.2 2009/10/11 18:35:36 rufina Exp $
+/* $Id: globalregistry.cpp,v 1.1.2.5 2014-09-19 11:45:54 rufina Exp $
  *
  * ruffina, Dream Land, 2006
  */
@@ -47,16 +47,6 @@ const DLString & GlobalRegistryBase::getName( int ndx ) const
 	return DLString::emptyString;
 }
 
-
-bool GlobalRegistryBase::goodIndex( int n ) const
-{
-    return (n >= 0 && n < (int) table.size( ));
-}
-
-int GlobalRegistryBase::size( ) const
-{
-    return table.size( );
-}
 
 int GlobalRegistryBase::add( GlobalRegistryElement::Pointer elem )
 {

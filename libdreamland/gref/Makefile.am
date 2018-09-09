@@ -17,6 +17,7 @@ libgref_la_SOURCES = \
 globalarray.cpp \
 globalbitvector.cpp \
 globalregistry.cpp \
+globalregistryelement.cpp \
 globalreference.cpp \
 xmlglobalarray.cpp \
 xmlglobalbitvector.cpp \

@@ -1,4 +1,4 @@
-/* $Id: xmlcontainer.cpp,v 1.1.2.5.10.2 2009/10/11 18:35:38 rufina Exp $
+/* $Id: xmlcontainer.cpp,v 1.1.2.5.10.3 2009/11/02 13:48:11 rufina Exp $
  *
  * ruffina, Dream Land, 2004
  */

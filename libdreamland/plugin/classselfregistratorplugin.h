@@ -1,4 +1,4 @@
-/* $Id: classselfregistratorplugin.h,v 1.1.2.2 2009/10/11 18:35:37 rufina Exp $
+/* $Id: classselfregistratorplugin.h,v 1.1.2.3 2010-09-01 21:20:47 rufina Exp $
  * 
  * ruffina, Dream Land, 2008
  */
@@ -6,7 +6,7 @@
 #ifndef __CLASSSELFREGISTRATORPLUGIN_H__
 #define __CLASSSELFREGISTRATORPLUGIN_H__
 
-template <char *&tn>
+template <const char *&tn>
 class ClassSelfRegistratorPlugin :
         public virtual XMLPolymorphVariable, 
         public Class::ClassRegistrator, 

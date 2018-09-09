@@ -1,4 +1,4 @@
-/* $Id: flexer.cpp,v 1.1.2.3 2009/10/11 18:35:36 rufina Exp $
+/* $Id: flexer.cpp,v 1.1.2.4 2010-09-01 21:20:47 rufina Exp $
  *
  * ruffina, Dream Land, 2007
  */
@@ -67,8 +67,8 @@ DLString Flexer::flexAux(const DLString &str, int part_num, bool fNeedRoot, bool
 		    iPhase = PHASE_COPYEND;
 	    }
 	}
-	else if (iPhase == PHASE_COPYEND && fNeedEnding  
-	         || iPhase == PHASE_COPYTOBUF && fNeedRoot) 
+	else if ((iPhase == PHASE_COPYEND && fNeedEnding)
+	         || (iPhase == PHASE_COPYTOBUF && fNeedRoot)) 
 	{
 	    buf << tempchar;
 	}

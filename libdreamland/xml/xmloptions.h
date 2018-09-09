@@ -15,7 +15,6 @@ class XMLOption : public ParentType {
 public:	
     using ParentType::fromXML;
     using ParentType::getValue;
-    using ParentType::setValue;
     
     XMLOption( ) : isOverriden( false )
     {

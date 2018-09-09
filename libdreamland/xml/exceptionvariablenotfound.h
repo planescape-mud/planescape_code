@@ -1,3 +1,7 @@
+/* $Id$
+ *
+ * ruffina, 2004
+ */
 // exceptionvariablenotfound.h: interface for the ExceptionVariableNotFound_ class.
 //
 //////////////////////////////////////////////////////////////////////

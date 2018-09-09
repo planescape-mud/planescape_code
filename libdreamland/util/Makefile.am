@@ -15,11 +15,13 @@ AM_LFLAGS =  -olex.yy.c
 #-S$(srcdir)/../../admin/flex.skl
 
 libutil_la_SOURCES = \
+crypto.cpp \
 date.cpp \
 logstream.cpp \
 lastlogstream.cpp \
 parsedate.l++ \
 regexp.cpp \
+iconvmap.cpp \
 dl_match.cpp \
 dl_math.cpp \
 dl_strings.cpp \

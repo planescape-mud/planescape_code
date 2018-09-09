@@ -25,6 +25,7 @@ public:
     typedef typename Map::iterator iterator;
     using Map::begin;
     using Map::end;
+    using Map::erase;
 
     inline void erase_delete( iterator, iterator );
     inline void erase_delete( iterator );

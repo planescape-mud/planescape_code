@@ -1,4 +1,4 @@
-/* $Id: plugin.h,v 1.12.2.2.18.3 2009/10/11 18:35:37 rufina Exp $
+/* $Id: plugin.h,v 1.12.2.2.18.4 2010-09-01 21:20:47 rufina Exp $
  * 
  * ruffina, Dream Land, 2005
  * based on idea by NoFate, 2002
@@ -17,7 +17,7 @@ public:
     template<typename PlugType, typename PlugList>
     static inline void registerPlugin( PlugList& ppl )
     {
-	    ppl.push_back( static_cast<Plugin*>( new PlugType( ) ) );
+        ppl.push_back( static_cast<Plugin*>( new PlugType( ) ) );
     }
 
 protected:

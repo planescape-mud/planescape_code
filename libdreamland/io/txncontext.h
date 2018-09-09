@@ -6,7 +6,10 @@
 #ifndef __TXNCONTEXT_H__
 #define __TXNCONTEXT_H__
 
+#include <stdint.h>
+
 #include "dlstring.h"
+
 
 class Db;
 class DbTxn;
@@ -45,8 +48,8 @@ private:
 
 class DbContext : public virtual TxnContext {
 public:
-    typedef unsigned long int key_t;
-    typedef unsigned int size_t;
+    typedef uint32_t key_t;
+    typedef uint32_t size_t;
 
     struct Data {
 	Data( ) : ptr(0), size(0) { }

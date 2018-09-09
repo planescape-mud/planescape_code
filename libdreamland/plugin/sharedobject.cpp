@@ -1,4 +1,4 @@
-/* $Id: sharedobject.cpp,v 1.1.4.4.6.3 2009/10/11 18:35:37 rufina Exp $
+/* $Id: sharedobject.cpp,v 1.1.4.4.6.4 2009/11/02 13:48:11 rufina Exp $
  * 
  * ruffina, Dream Land, 2005
  */

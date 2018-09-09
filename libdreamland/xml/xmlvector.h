@@ -24,6 +24,7 @@ public:
     using Vector::begin;
     using Vector::resize;
     using Vector::empty;
+    using Vector::insert;
     
     XMLVectorBase( bool flag = false, int size = 0 ) 
                      : saveEmpty( flag ), defaultSize( size )

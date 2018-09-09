@@ -4,7 +4,7 @@
 
 //#define YYDEBUG 1
 
-/* $Id: syn.y++,v 1.3.4.5.8.1 2007/09/29 19:22:21 margo Exp $
+/* $Id: syn.y++,v 1.3.4.5.8.3 2014-09-19 11:42:19 rufina Exp $
  *
  * ruffina, 2004
  */
@@ -53,15 +53,16 @@ getFQCN(string ln) {
 %token		PRIVATE
 %token		PROTECTED
 %token		PUBLIC
-%token		NAME
-%token		NAME_TEMPLATE
+%token 		NAME
+%token 		NAME_TEMPLATE
 %token		TYPE
 %token		NAMESPACE
 
 
-%type<getString( )>	NAME
+%type<getString( )>    NAME
 %type<getString( )>	TYPE
-%type<getString()>	NAME_TEMPLATE
+%type<getString( )>	NAME_TEMPLATE
+
 
 %%
 

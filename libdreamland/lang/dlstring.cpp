@@ -1,4 +1,4 @@
-/* $Id: dlstring.cpp,v 1.14.2.21.6.13 2009/10/11 18:35:37 rufina Exp $
+/* $Id: dlstring.cpp,v 1.2 2011/08/10 15:07:05 rufina Exp $
  *
  * ruffina, Dream Land, 2004
  */
@@ -103,6 +103,13 @@ DLString& DLString::assign( unsigned int value )
 	return assign( buf.str( ) );
 }
 
+DLString& DLString::assign( long unsigned int value )
+{
+	basic_ostringstream<char> buf;
+	buf << value;
+	return assign( buf.str( ) );
+}
+
 DLString& DLString::assign( int value )
 {
 	basic_ostringstream<char> buf;
@@ -132,6 +139,13 @@ DLString& DLString::append( short value )
 }
 
 DLString& DLString::append( unsigned int value )
+{
+	basic_ostringstream<char> buf;
+	buf << value;
+	return append( buf.str( ) );
+}
+
+DLString& DLString::append( long unsigned int value )
 {
 	basic_ostringstream<char> buf;
 	buf << value;
@@ -378,7 +392,8 @@ DLString DLString::getOneArgument( )
 	    break;
 	}
 
-	ret += dl_tolower( *i );
+//	ret += dl_tolower( *i );
+	ret += *i;
 	i++;
     }
 
@@ -428,6 +443,18 @@ bool DLString::isNumber( ) const
 	if( ch < '0' || ch > '9' ) 
 	    return false;
     }
+
+    return true;
+}
+
+bool DLString::isRussian( ) const
+{
+    if (empty( ))
+	return false;
+
+    for (size_type i = 0; i < length( ); i++) 
+	if (!dl_isrusalpha( at( i ) ))
+	    return false;
 
     return true;
 }
@@ -665,7 +692,10 @@ DLString & DLString::upperFirstCharacter( )
 
 bool DLString::equalLess( const DLString &str ) const
 {
-    for( size_type pos = 0; pos < length( ); pos++ )
+    if (length( ) != str.length( ))
+	return false;
+
+    for( size_type pos = 0; pos < length( ); pos++ ) 
 	if( dl_tolower( at( pos ) ) != dl_tolower( str.at( pos ) ) )
 		return false;
 
