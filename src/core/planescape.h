@@ -164,6 +164,9 @@ private:
 
     // sleep to resynchronize with the next pulse
     void sleepUp();
+
+    // Pulse start time in processor clock ticks.
+    clock_t pulseStartTime;
 };
 
 /*
