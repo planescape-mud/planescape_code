@@ -14,6 +14,8 @@
 
 using Scripting::CodeSource;
 
+extern void cmd_findrefs(struct char_data *ch, DLString &args);
+
 void cmd_plugin(struct char_data *ch, DLString &args) 
 {
 
@@ -107,6 +109,11 @@ bool cmd_hook(struct char_data *ch, char *ccmd, char *carg)
 
     if (cmd == "ftp") {
         cmd_ftp(ch, args);
+        return true;
+    }
+
+    if (cmd == "findrefs") {
+        cmd_findrefs(ch, args);
         return true;
     }
 

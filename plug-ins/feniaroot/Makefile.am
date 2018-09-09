@@ -2,6 +2,7 @@ lib_LTLIBRARIES = libfeniaroot.la
 
 libfeniaroot_la_SOURCES = \
 ceval.cpp \
+cfindref.cpp \
 characterwrapper.cpp \
 objectwrapper.cpp \
 roomwrapper.cpp \
