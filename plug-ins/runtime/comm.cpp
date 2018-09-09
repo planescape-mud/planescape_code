@@ -2378,13 +2378,13 @@ void signal_init()
 
     signal(SIGPIPE, SIG_IGN);
     signal(SIGALRM, SIG_IGN);
-    signal(SIGFPE, Handler);
-    signal(SIGSEGV, Handler);
+//    signal(SIGFPE, Handler);
+//    signal(SIGSEGV, Handler);
     signal(SIGTSTP, SIG_IGN);
     signal(SIGTRAP, SIG_IGN);
-    signal(SIGILL, Handler);
+//    signal(SIGILL, Handler);
     signal(SIGALRM, SIG_IGN);
-    signal(SIGBUS, Handler);
+//    signal(SIGBUS, Handler);
     signal(SIGSTOP, SIG_IGN);
 }
 
