@@ -32,6 +32,7 @@ ID	    {L}({L}|[0-9_])*
 
 
 %x QUOTE
+%x DQUOTE
 %x COMMENT
 
 %%
@@ -52,14 +53,26 @@ ID	    {L}({L}|[0-9_])*
 .
 }
 
-\"	    { BEGIN(QUOTE); buf.clear(); }
+\'	    { BEGIN(QUOTE); buf.clear(); }
 <QUOTE>{
+\'	    { BEGIN(INITIAL); value->str = buf; return T_STR; }
+\\n	    { buf += '\n';      }
+\\r	    { buf += '\r';      }
+\\t	    { buf += '\t';      }
+\\.	    { buf += yytext[1]; }
+.	    { buf += yytext[0]; }
+\n          { buf += yytext[0]; }
+}
+
+\"	    { BEGIN(DQUOTE); buf.clear(); }
+<DQUOTE>{
 \"	    { BEGIN(INITIAL); value->str = buf; return T_STR; }
 \\n	    { buf += '\n';      }
 \\r	    { buf += '\r';      }
 \\t	    { buf += '\t';      }
 \\.	    { buf += yytext[1]; }
 .	    { buf += yytext[0]; }
+\n          { buf += yytext[0]; }
 }
 
 "<"	    { return *yytext; }
@@ -88,6 +101,7 @@ ID	    {L}({L}|[0-9_])*
 
 "!="	    { return T_NEQ; }
 "=="	    { return T_EQ; }
+"->"        { return T_ARROW; }
 
 "null"	    { return T_NULL; }
 "if"	    { return T_IF; }
@@ -115,6 +129,8 @@ ID	    {L}({L}|[0-9_])*
 		value->id = Lex::getThis()->resolve(yytext);
 		return T_ID; 
 	    }
+
+.           { error((DLString("unexpected char: ") + yytext[0]).c_str()); }
 
 %%
 
