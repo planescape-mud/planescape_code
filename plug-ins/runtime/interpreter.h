@@ -154,6 +154,7 @@ void string_write(struct descriptor_data *d, char **txt, size_t len, long mailto
 #define SCMD_PROMPT     48
 #define SCMD_BANK_RENT 49
 #define SCMD_SELFMESS 50
+#define SCMD_MAPPER 51
 
 
 /* do_wizutil */

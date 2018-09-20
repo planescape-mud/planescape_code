@@ -729,6 +729,7 @@ using namespace std;
 #define PRF_EXAMINE     (INT_ONE | 1 << 18)
 #define PRF_EXITRUS     (INT_ONE | 1 << 19) /* автовыходы. на русском */
 #define PRF_SELFMESS    (INT_ONE | 1 << 20) /* только свои боевые сообщения */
+#define PRF_MAPPER 		(INT_ONE | 1 << 21)
 
 
 #define MAX_SPELL_AFFECTS 25 /* максимальное кол-во аффектов на чара (не с эффектами) */

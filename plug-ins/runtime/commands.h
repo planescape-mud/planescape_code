@@ -275,6 +275,7 @@ ACMD(do_trackon);
 ACMD(do_output);
 ACMD(do_light_on);
 ACMD(do_light_off);
+ACMD(do_where_im);
 
 /* This is the Master Command List(tm).
 
@@ -336,7 +337,7 @@ const struct command_info cmd_info[] = {
     { "оглядеться"        , "scan" , POS_RESTING   , do_scan    , 0  , 0, 0 , FALSE},
     { "следовать"         , "follow" , POS_RESTING   , do_follow   , 0  , 0, 0 , FALSE},
     { "подойти"       , "stepforth" , POS_FIGHTING  , do_move_up, 0  , 0, -1 , FALSE},
-
+	{ "гдея"              , "whereim", POS_RESTING, do_where_im, 0  , 0, -1 , FALSE},
     /* УМЕНИЯ */
     { "бальзамировать" , "balsam" , POS_STANDING, do_balsam, 0, 0,  -1, FALSE},
     { "блок"  , "block" , POS_FIGHTING, do_block    , 0, 0, -1 , FALSE},
@@ -514,6 +515,7 @@ const struct command_info cmd_info[] = {
     /* ИММОВСКИЕ КОМАНДЫ */
     // привилегия LVL_IMMORT (31)
     { "идти"  , "goto" , POS_SLEEPING, do_goto     , LVL_IMMORT, 0, -1 , FALSE},
+    { "прыжок"  , "goto" , POS_SLEEPING, do_goto     , LVL_IMMORT, 0, -1 , FALSE},
     { "всевидение" , "holylight" , POS_DEAD    , do_gen_tog  , LVL_IMMORT, SCMD_HOLYLIGHT, 1 , FALSE},
     { "где"               , "where" , POS_RESTING , do_where    , LVL_IMMORT, 0, 1 , FALSE},
     { "невидимость" , "invisible" , POS_DEAD    , do_invis    , LVL_IMMORT, 0, 1 , FALSE},

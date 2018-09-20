@@ -2749,6 +2749,7 @@ const char *gen_tog_type[] = { "карта", "mapping",
     "промтбоя", "prompt",
     "постой", "rent",
     "сообщения", "messages",
+	"маппер", "mapper",
     "\n"
 };
 
@@ -2807,7 +2808,9 @@ LVL_IMPL, SCMD_CODERINFO}, {
 0, SCMD_DIVR}, {
 0, SCMD_PROMPT}, {
 0, SCMD_BANK_RENT}, {
-0, SCMD_SELFMESS},};
+0, SCMD_SELFMESS}, {
+0, SCMD_MAPPER},
+};
 
 ACMD(do_mode)
 {
@@ -2942,6 +2945,8 @@ ACMD(do_gen_tog)
          "Вы оплачиваете постой из наличных денег, а потом через банк.\r\n"},
         {"Вы видете все сообщения боя.\r\n",
          "Вы видете только свои сообщения боя.\r\n"},
+		{"Теперь рядом с названием комнаты будет показываться ее индивидуальный номер.\r\n",
+         "Теперь рядом с названием комнаты не будет показываться ее индивидуальный номер.\r\n"},
     };
 
 
@@ -3128,6 +3133,9 @@ ACMD(do_gen_tog)
         case SCMD_PROMPT:
             result = PRF_TOG_CHK(ch, PRF_PROMPT);
             break;
+		case SCMD_MAPPER:
+			result = PRF_TOG_CHK(ch, PRF_MAPPER);
+			break;
 
 #if defined(HAVE_ZLIB)
         case SCMD_COMPRESS:

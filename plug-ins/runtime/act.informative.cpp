@@ -167,6 +167,7 @@ const char *weapon_class[] = {
     "огнестрельное"
 };
 
+
 char *diag_weapon_to_char(struct obj_data *obj, int show_wear)
 {
     static char out_str[MAX_STRING_LENGTH];
@@ -1182,6 +1183,12 @@ char *do_auto_exits(struct char_data *ch)
     return (buf2);
 }
 
+ACMD(do_where_im)
+{
+	char buf[MAX_STRING_LENGTH];
+	sprintf(buf, "Вы находитесь в зоне: %s\r\n", zone_table[world[IN_ROOM(ch)].zone].name);
+	send_to_char(buf, ch);
+}
 
 ACMD(do_exits)
 {
@@ -1334,8 +1341,18 @@ void look_at_room(struct char_data *ch, int ignore_brief)
             } else if (IS_CLOUD(IN_ROOM(ch)) && (!PRF_FLAGGED(ch, PRF_HOLYLIGHT)))
                 strcat(buf_room, "Густой туман\r\n");
             else if (!IS_DARK_CHECK(IN_ROOM(ch)) || PRF_FLAGGED(ch, PRF_HOLYLIGHT))
+			{
+				if (PRF_FLAGGED(ch, PRF_MAPPER))
+				{
+					sprintf(buf_room + strlen(buf_room), "%s [%d]\r\n",
+                        get_name_pad(world[ch->in_room].name, PAD_IMN, PAD_OBJECT), GET_ROOM_VNUM(IN_ROOM(ch)));
+				}
+				else
+				{
                 sprintf(buf_room + strlen(buf_room), "%s\r\n",
                         get_name_pad(world[ch->in_room].name, PAD_IMN, PAD_OBJECT));
+				}
+			}
 
             strcat(buf_room, CCNRM(ch, C_NRM));
         } else
@@ -1734,7 +1751,6 @@ void exam_at_char(struct char_data *i, struct char_data *ch, char *arg)
         else if (AFF_FLAGGED(i, AFF_LEVIT) && GET_POS(i) == POS_FLYING)
             sprintf(buf2, "парит");
         else
-
             sprintf(buf2, POS_STATE[(int) GET_POS(i)]);
 
         sprintf(buf, "Перед Вами %s %s %s %s %s роста. ",
@@ -4286,7 +4302,8 @@ ACMD(do_toggle)
             "реж сменацвета     : Смена цветовой гаммы мада            %-3s\r\n"
             "реж осмотр         : Игроки могут рассматривать вашу экип.%-3s\r\n"
             "реж русвыход       : Отображение автовыходов в рус. языке %-3s\r\n"
-            "реж сообщения      : Показ только собст. боевых сообщений %-3s\r\n",
+            "реж сообщения      : Показ только собст. боевых сообщений %-3s\r\n"
+			"реж маппер         : Показ уникального номера комнаты     %-3s\r\n", 
             ONOFF(PRF_FLAGGED(ch, PRF_DISPHP)),
             ONOFF(PRF_FLAGGED(ch, PRF_DISPMOVE)),
             ONOFF(PRF_FLAGGED(ch, PRF_DISPMANA)),
@@ -4318,7 +4335,8 @@ ACMD(do_toggle)
             YESNO(!PRF_FLAGGED(ch, PRF_NOGIVE)),
             YESNO(PRF_FLAGGED(ch, PRF_THEME)),
             YESNO(!PRF_FLAGGED(ch, PRF_EXAMINE)),
-            YESNO(PRF_FLAGGED(ch, PRF_EXITRUS)), ONOFF(PRF_FLAGGED(ch, PRF_SELFMESS))
+            YESNO(PRF_FLAGGED(ch, PRF_EXITRUS)), ONOFF(PRF_FLAGGED(ch, PRF_SELFMESS)),
+			YESNO(PRF_FLAGGED(ch, PRF_MAPPER))
         );
 
     page_string(ch->desc, buf, TRUE);
