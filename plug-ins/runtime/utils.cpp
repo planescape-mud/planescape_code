@@ -2899,7 +2899,7 @@ int get_save_obj(struct obj_data *obj, int save)
     long wgt = 1;
     struct material_data_list *m;
 
-    if (!obj->materials)
+    if (!obj || !obj->materials)
         return (FALSE);
 
     for (m = obj->materials; m; m = m->next) {

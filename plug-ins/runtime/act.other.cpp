@@ -30,6 +30,7 @@
 #include "xquests.h"
 #include "xboot.h"
 #include "planescape.h"
+#include "textfileloader.h"
 #include "dlfileop.h"
 #include "mudfile.h"
 #include "date.h"
