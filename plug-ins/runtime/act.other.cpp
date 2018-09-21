@@ -2749,7 +2749,7 @@ const char *gen_tog_type[] = { "карта", "mapping",
     "промтбоя", "prompt",
     "постой", "rent",
     "сообщения", "messages",
-	"маппер", "mapper",
+    "маппер", "mapper",
     "\n"
 };
 
@@ -2945,7 +2945,7 @@ ACMD(do_gen_tog)
          "Вы оплачиваете постой из наличных денег, а потом через банк.\r\n"},
         {"Вы видете все сообщения боя.\r\n",
          "Вы видете только свои сообщения боя.\r\n"},
-		{"Теперь рядом с названием комнаты будет показываться ее индивидуальный номер.\r\n",
+        {"Теперь рядом с названием комнаты будет показываться ее индивидуальный номер.\r\n",
          "Теперь рядом с названием комнаты не будет показываться ее индивидуальный номер.\r\n"},
     };
 
@@ -3133,9 +3133,9 @@ ACMD(do_gen_tog)
         case SCMD_PROMPT:
             result = PRF_TOG_CHK(ch, PRF_PROMPT);
             break;
-		case SCMD_MAPPER:
-			result = PRF_TOG_CHK(ch, PRF_MAPPER);
-			break;
+        case SCMD_MAPPER:
+            result = PRF_TOG_CHK(ch, PRF_MAPPER);
+            break;
 
 #if defined(HAVE_ZLIB)
         case SCMD_COMPRESS:
@@ -3271,7 +3271,9 @@ ACMD(do_help)
     skip_spaces(&argument);
 
     if (!*argument) {
-        /* XXX help screen file is lost */
+        const DLString & text = mud->getTextFileLoader()->get("summary");
+        if (!text.empty())
+            page_string(ch->desc, text.c_str(), 1);
         return;
     }
 
