@@ -2,6 +2,8 @@
 
 Tested on Ubuntu 16.04.
 
+If you want to build a ready-to-run image using docker, see [these instructions](https://github.com/planescape-mud/planescape_docker).
+
 ### Install packages
 
 ```bash
@@ -14,14 +16,15 @@ apt-get install -y libdb5.3++:i386 libdb5.3++-dev:i386 libdb5.3:i386 zlib1g-dev:
 
 ### Create folder tree
 
-Let's assume we're under /home/psmud:
+Let's assume we're under /home/planescape:
 
 ```bash
-git clone https://yourname@bitbucket.org/psmud/planescape_world.git
+git clone https://github.com/planescape-mud/planescape_world.git
 git clone https://github.com/planescape-mud/planescape_code.git
 mkdir runtime
 mkdir objs
-mv planescape_world runtime/share
+ln -s /home/planescape/planescape_world runtime/share
+ln -s /home/planescape/planescape_world/world.mini runtime/share/world
 ```
 
 ### Compile source code
@@ -30,14 +33,14 @@ mv planescape_world runtime/share
 cd planescape_code
 make -f Makefile.git
 cd ../objs
-../planescape_code/configure --prefix=/home/psmud/runtime
+../planescape_code/configure --prefix=/home/planescape/runtime
 make -j 4 && make install 
 ```
 
 ### Start MUD
 
 ```bash
-cd /home/psmud/runtime
+cd /home/planescape/runtime
 ./bin/planescape etc/planescape.xml &
 ```
 Or, recommended:
@@ -54,7 +57,7 @@ less var/log/syslog*
 ### Changing a plugin
 First, rebuild and reinstall the plugin you want to change. For example, you've just changed something in feniaroot plugin:
 ```bash
-cd /home/psmud/objs/plug-ins/feniaroot
+cd /home/planescape/objs/plug-ins/feniaroot
 make -j 4 && make install
 ```
 Tell the server to reload all plugins:
@@ -65,12 +68,12 @@ Tell the server to reload just changed plugins:
 ```bash
 kill -s SIGUSR2 PID
 ```
-Note: when running as ./bin/autorun, you can use ``cat /home/psmud/runtime/var/run/ps.pid`` instead of PID to get the server process ID.
+Note: when running as ./bin/autorun, you can use ``cat /home/planescape/runtime/var/run/ps.pid`` instead of PID to get the server process ID.
 
 ### Changing core code or libdreamland
 First, rebuild and reinstall src or libdreamland. For example:
 ```bash
-cd /home/psmud/objs/src
+cd /home/planescape/objs/src
 make -j 4 && make install
 ```
 Then reboot:
