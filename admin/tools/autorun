@@ -144,6 +144,8 @@ while ( : ) do
   DATE=`date`
   echo "$DATE: autorun starting game" >> syslog
   echo "$DATE: running $BIN $FLAGS $PORT" >> syslog
+  ulimit -c unlimited
+  echo "$DATE:" `ulimit -c` >> syslog
 
   # On Cygwin, you may need to precede this next line with './' for
   # './bin/circle' as the command.
