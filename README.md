@@ -64,6 +64,12 @@ Tell the server to reload all plugins:
 ```bash
 kill -s SIGUSR1 PID
 ```
+
+Or from inside the game, type:
+```
+reload plugins
+```
+
 Tell the server to reload just changed plugins:
 ```bash
 kill -s SIGUSR2 PID
