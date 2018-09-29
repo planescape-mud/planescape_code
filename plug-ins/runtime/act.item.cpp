@@ -1144,6 +1144,7 @@ void go_drink_item(struct char_data *ch, struct obj_data *obj, int mode, int on_
             send_to_charf(ch, "Ваш желудок не выдержит столько жидкости.\r\n");
             return;
         }
+        GET_MOVE(ch) = MIN(GET_MOVE(ch) + value / 40, GET_REAL_MAX_MOVE(ch));
 
         if (drink_aff[drink][THIRST] && GET_COND(ch, THIRST) > -1)
             GET_COND(ch, THIRST) += (value * drink_aff[drink][THIRST]) / 100;
@@ -1311,6 +1312,7 @@ bool eat_item(struct char_data *ch, struct obj_data *obj)
             send_to_charf(ch, "Ваш желудок не выдержит столько еды.\r\n");
             return (FALSE);
         }
+        GET_HIT(ch) = MIN(GET_HIT(ch) + value / 30, GET_REAL_MAX_HIT(ch));
 
         if (GET_COND(ch, FULL) > -1)
             GET_COND(ch, FULL) += value;

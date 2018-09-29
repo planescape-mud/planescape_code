@@ -1866,8 +1866,9 @@ int calc_affect_attack(struct char_data *ch, struct char_data *victim)
         attack /= 2;
 
     //Если хотим спать, то получаем -10 к атаке
+    /* 29.09.2018 Убираем штрафы
     if (!IS_NPC(ch) && GET_LEVEL(ch) > 15 && GET_COND(ch, SLEEP) == 0)
-        attack -= 10;
+        attack -= 10;*/
 
     return attack;
 }
@@ -3909,8 +3910,10 @@ int _damage(struct char_data *ch,
                 improove_skill(ch, victim, 0, addskill);
         }
         //Расчет дополнительных увеличивающих/уменьшающих эффектов
+        /* 29.09.2018 Убираем штрафы
         if (!IS_NPC(ch) && weapon && ((GET_COND(ch, FULL) == 0 || GET_COND(ch, THIRST) == 0 || GET_COND(ch, SLEEP) == 0)) && GET_LEVEL(ch) >= 15)       //Хотим есть
             dam /= 2;
+            */
 
         if (GET_POS(victim) < POS_FIGHTING && IS_SET(bl_bits, BL_IGNORE))
             dam =

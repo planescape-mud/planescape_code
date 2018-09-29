@@ -4303,7 +4303,8 @@ ACMD(do_toggle)
             "реж осмотр         : Игроки могут рассматривать вашу экип.%-3s\r\n"
             "реж русвыход       : Отображение автовыходов в рус. языке %-3s\r\n"
             "реж сообщения      : Показ только собст. боевых сообщений %-3s\r\n"
-			"реж маппер         : Показ уникального номера комнаты     %-3s\r\n", 
+			"реж маппер         : Показ уникального номера комнаты     %-3s\r\n"
+            "реж миникарта      : Показ миникарты                      %-3s\r\n", 
             ONOFF(PRF_FLAGGED(ch, PRF_DISPHP)),
             ONOFF(PRF_FLAGGED(ch, PRF_DISPMOVE)),
             ONOFF(PRF_FLAGGED(ch, PRF_DISPMANA)),
@@ -4336,7 +4337,8 @@ ACMD(do_toggle)
             YESNO(PRF_FLAGGED(ch, PRF_THEME)),
             YESNO(!PRF_FLAGGED(ch, PRF_EXAMINE)),
             YESNO(PRF_FLAGGED(ch, PRF_EXITRUS)), ONOFF(PRF_FLAGGED(ch, PRF_SELFMESS)),
-			YESNO(PRF_FLAGGED(ch, PRF_MAPPER))
+			YESNO(PRF_FLAGGED(ch, PRF_MAPPER)),
+            YESNO(PRF_FLAGGED(ch, PRF_MINIMAP))
         );
 
     page_string(ch->desc, buf, TRUE);

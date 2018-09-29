@@ -103,12 +103,13 @@ int mana_gain(struct char_data *ch)
         percent += MAX(1, 2 + world[IN_ROOM(ch)].fires * 10);
 
     if (!IS_NPC(ch)) {
+        /* 29.09.2018 Убираем штрафы
         if (GET_COND(ch, FULL) == 0)
             percent -= 15;
         if (GET_COND(ch, THIRST) == 0)
             percent -= 15;
         if (GET_COND(ch, SLEEP) == 0)
-            percent -= 5;
+            percent -= 5;*/
         if (GET_COND(ch, DRUNK) >= CHAR_DRUNKED)
             percent -= 75;
     }
@@ -220,7 +221,7 @@ int hit_gain(struct char_data *ch)
     if (world[IN_ROOM(ch)].fires)       //5% за каждый костер в комнате
         percent += MAX(1, 5 + world[IN_ROOM(ch)].fires * 10);
 
-
+    /* 29.09.2018 Убираем штрафы
     if (!IS_NPC(ch)) {
         if (GET_COND(ch, FULL) == 0)
             percent -= 15;
@@ -228,7 +229,7 @@ int hit_gain(struct char_data *ch)
             percent -= 15;
         if (GET_COND(ch, SLEEP) == 0)
             percent -= 10;
-    }
+    }*/
 
     percent += GET_HITREG(ch);
 
@@ -342,12 +343,13 @@ int move_gain(struct char_data *ch)
         }
 
     if (!IS_NPC(ch)) {
+        /* 29.09.2018 Убираем штрафы
         if (GET_COND(ch, FULL) == 0)
             percent -= 15;
         if (GET_COND(ch, THIRST) == 0)
             percent -= 15;
         if (GET_COND(ch, SLEEP) == 0)
-            percent -= 10;
+            percent -= 10; */
         if (affected_by_spell(ch, SPELL_HIDE))
             percent -= 50;
         if (affected_by_spell(ch, SPELL_CAMOUFLAGE))
@@ -621,7 +623,7 @@ void gain_condition(struct char_data *ch, int condition, int value)
 
 //send_to_charf(ch,"Устанавливаю %d в + %d\r\n",condition,value);
     // раздражает же! (наверное)
-    //GET_COND(ch, condition) += value;
+    GET_COND(ch, condition) += value;
 
     switch (condition) {
         case DRUNK:
@@ -652,7 +654,7 @@ void gain_condition(struct char_data *ch, int condition, int value)
             break;
     }
 
-    if (GET_COND(ch, condition) == SECS_PER_MUD_TICK && GET_POS(ch) > POS_SLEEPING) {
+    /*if (GET_COND(ch, condition) == SECS_PER_MUD_TICK && GET_POS(ch) > POS_SLEEPING) {
         switch (condition) {
             case FULL:
                 send_to_char("Вы испытываете легкий голод.\r\n", ch);
@@ -693,7 +695,7 @@ void gain_condition(struct char_data *ch, int condition, int value)
                 return;
             default:
                 break;
-        }
+        }*/
 
 }
 

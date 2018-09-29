@@ -36,6 +36,7 @@ journal.cpp \
 limits.cpp \
 magic.cpp \
 mail.cpp \
+map.cpp \
 mobact.cpp \
 mobmax.cpp \
 modify.cpp \
