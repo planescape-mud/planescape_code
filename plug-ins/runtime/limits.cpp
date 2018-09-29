@@ -620,7 +620,8 @@ void gain_condition(struct char_data *ch, int condition, int value)
         return;                 /* во время боя деремся а не жрать просим */
 
 //send_to_charf(ch,"Устанавливаю %d в + %d\r\n",condition,value);
-    GET_COND(ch, condition) += value;
+    // раздражает же! (наверное)
+    //GET_COND(ch, condition) += value;
 
     switch (condition) {
         case DRUNK:

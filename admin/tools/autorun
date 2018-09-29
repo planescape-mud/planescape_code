@@ -154,6 +154,9 @@ while ( : ) do
   save_pid $MUD_PIDFILE $!
   wait $!
 
+  # Rotate core files.
+  proc_coredump
+
   if [ -r $KILLSCRIPT_FILE ]; then
     DATE=`date`;
     echo "$DATE: autoscript killed"  >> syslog

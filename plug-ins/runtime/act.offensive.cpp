@@ -248,7 +248,17 @@ ACMD(do_hit)
         send_to_char("Вообще-то Вы уже участвуете в бою.\r\n", ch);
         return;
     }
-
+    if (!*arg)
+    {
+        for (vict = world[ch->in_room].people; vict; vict = vict->next_in_room)
+        {
+            if (!vict or !IS_NPC(vict))
+                continue;
+            strcpy(arg, vict->player.name);
+            break;
+        }
+    }
+    
     if (!*arg)
         send_to_char("На кого напасть?\r\n", ch);
     else if (!(vict = get_char_vis(ch, arg, FIND_CHAR_ROOM)))
