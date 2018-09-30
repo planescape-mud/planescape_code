@@ -36,6 +36,7 @@ int horse_keeper(struct char_data *ch, void *me, int cmd, char* argument);
 int guild_mono(struct char_data *ch, void *me, int cmd, char* argument);
 int guild_poly(struct char_data *ch, void *me, int cmd, char* argument);
 int torc(struct char_data *ch, void *me, int cmd, char* argument);
+ACMD(do_map);
 namespace Noob
 {
 int outfit(struct char_data *ch, void *me, int cmd, char* argument);
@@ -795,8 +796,8 @@ void print_map(struct char_data *ch, struct char_data *imm)
 	}
 }
 
-
-void do_map(struct char_data *ch, char *argument, int/* cmd*/, int/* subcmd*/)
+}
+ACMD(do_map)
 {
 	if (IS_NPC(ch))
 	{
@@ -804,6 +805,4 @@ void do_map(struct char_data *ch, char *argument, int/* cmd*/, int/* subcmd*/)
 	}
 	MapSystem::print_map(ch);
 }
-}
-
 // vim: ts=4 sw=4 tw=0 noet syntax=cpp :

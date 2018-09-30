@@ -30,7 +30,7 @@
 #include "planescape.h"
 #include "mudstats.h"
 #include "textfileloader.h"
-
+#include "map.hpp"
 /* extern functions */
 SPECIAL(shoper);
 
@@ -58,7 +58,6 @@ ACMD(do_users);
 ACMD(do_gen_ps);
 void perform_mortal_where(struct char_data *ch, char *arg);
 void perform_immort_where(struct char_data *ch, char *arg);
-
 ACMD(do_where);
 ACMD(do_levels);
 ACMD(do_consider);
@@ -1342,6 +1341,12 @@ void look_at_room(struct char_data *ch, int ignore_brief)
                 strcat(buf_room, "Густой туман\r\n");
             else if (!IS_DARK_CHECK(IN_ROOM(ch)) || PRF_FLAGGED(ch, PRF_HOLYLIGHT))
 			{
+                if (PRF_FLAGGED(ch, PRF_MINIMAP))
+				{
+                    MapSystem::print_map(ch);
+                }
+                send_to_char("\r\n", ch);
+                
 				if (PRF_FLAGGED(ch, PRF_MAPPER))
 				{
 					sprintf(buf_room + strlen(buf_room), "%s [%d]\r\n",

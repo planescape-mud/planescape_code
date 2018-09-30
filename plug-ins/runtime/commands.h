@@ -276,7 +276,7 @@ ACMD(do_output);
 ACMD(do_light_on);
 ACMD(do_light_off);
 ACMD(do_where_im);
-
+ACMD(do_map);
 /* This is the Master Command List(tm).
 
  * You can put new commands in, take commands out, change the order
@@ -407,6 +407,7 @@ const struct command_info cmd_info[] = {
     { "орать"             , "shout" , POS_RESTING   , do_gen_comm , 0  , SCMD_SHOUT, -1 , FALSE},
     { "крикнуть"          , "hole" , POS_RESTING   , do_gen_comm , 0  , SCMD_HOLLER, -1 , FALSE},
     { "кто"               , "who"  , POS_SLEEPING  , do_who      , 0  , 0, 1, TRUE },
+    { "карта"               , "map"  , POS_SLEEPING  , do_map      , 0  , 0, 1, TRUE },
     { "заклинания"        , "spells" , POS_DEAD      , do_spells   , 0  , 0, 1 , FALSE},
     { "молитвы"           , "prays" , POS_DEAD      , do_prays    , 0  , 0, 1 , FALSE},
     { "эффекты"           , "affects" , POS_DEAD      , do_affects  , 0  , SCMD_AUCTION, 1 , TRUE},
