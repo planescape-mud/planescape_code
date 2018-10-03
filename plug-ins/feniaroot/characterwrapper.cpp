@@ -15,6 +15,7 @@
 #include "db.h"
 #include "spells.h"
 #include "constants.h"
+#include "xboot.h"
 #include "interpreter.h"
 #include "../runtime/handler.h"
 
@@ -400,3 +401,47 @@ NMI_INVOKE( CharacterWrapper, gain_exp, "(exp, show_msg) набрать exp очков опыта
     ::gain_exp(target, exp, show_message);
     return Register();
 }
+
+
+NMI_INVOKE( CharacterWrapper, quest_get, "(vnum, number) выполнил ли игрок квест number у квестора vnum?" )
+{
+    METHOD_PC_ONLY
+    int vnum = arg_one(args).toNumber();
+    int number = arg_two(args).toNumber();
+    return Register(get_quested(target, vnum, number));	
+}
+
+NMI_INVOKE( CharacterWrapper, quest_set, "(vnum, number) пометить, что игрок выполнил квест number у квестора vnum" )
+{
+    METHOD_PC_ONLY
+    int vnum = arg_one(args).toNumber();
+    int number = arg_two(args).toNumber();
+    set_quested(target, vnum, number);
+    return Register();	
+}
+
+NMI_INVOKE( CharacterWrapper, quest_check, "(vnum, number) состояние квеста number у квестора vnum: 0 не брали, 1 в процессе, 2 закончен" )
+{
+    METHOD_PC_ONLY
+    int vnum = arg_one(args).toNumber();
+    int number = arg_two(args).toNumber();
+    return Register(check_quest(target, vnum, number));
+}
+
+NMI_INVOKE( CharacterWrapper, quest_add, "(vnum, number) добавить игроку квест под номером number, взятый у квестора vnum" )
+{
+    METHOD_PC_ONLY
+    int vnum = arg_one(args).toNumber();
+    int number = arg_two(args).toNumber();
+    return Register(add_quest(target, vnum, number));
+}
+
+NMI_INVOKE( CharacterWrapper, quest_del, "(vnum, number) удалить у игрока квест под номером number, взятый у квестора vnum" )
+{
+    METHOD_PC_ONLY
+    int vnum = arg_one(args).toNumber();
+    int number = arg_two(args).toNumber();
+    del_quest(target, vnum, number);
+    return Register();	
+}
+

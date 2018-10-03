@@ -18,8 +18,22 @@
 #include "expr.h"
 
 
+/**
+ * Получить виртуальный номер квеста из внума моба и номера квеста.
+ * Виртуальный номер используется как уникальный идентификатор квеста
+ * при сохранении инфы о выполненных квестах на персонаже.
+ */
+static int quest_vnum(int vnum, int number)
+{
+    char qbuf[16];
+    sprintf(qbuf, "%d%d", vnum, number);
+    return atoi(qbuf);
+}
 
-
+/**
+ * Вывод игроку ch списка квестов и меню действий, доступных рядом с мобов victim.
+ * Вызывается из команды listen и из одного из пунктов меню.
+ */
 int go_show_quests(struct char_data *ch, struct char_data *victim)
 {
     struct mob_quest_data *quests = NULL;
@@ -32,40 +46,46 @@ int go_show_quests(struct char_data *ch, struct char_data *victim)
     char qscrpt[20][MAX_STRING_LENGTH];
     char buf[MAX_EXTEND_LENGTH];
 
+    // Запомнить с кем разговариваем и сбросить выбранный пункт меню.
     vnum = GET_MOB_VNUM(victim);
     ch->player.current_quest_mob = victim;
     ch->player.select_mode = -1;
+    // Составление списка заданий.
     for (quests = victim->quests; quests; quests = quests->next) {
-        char qbuf[16];
         int number = quests->number;
-
-        sprintf(qbuf, "%d%d", vnum, number);
-        int qvnum = atoi(qbuf);
+        int qvnum = quest_vnum(vnum, number);
         char *name = quests->name;
 
-        //Проверка условия
+        //Проверка условия, доступен ли персонажу квест в принципе.
         if (!EXPR(quests->expr)->Expr(ch, victim, NULL))
             continue;
 
+        // Проверка, выполнил ли он когда-либо этот квест.
         if (!get_quested(ch, qvnum)) {
             int flcomp = check_quest(ch, vnum, number);
 
             if (!flcomp) {
+                // Запомнить доступные еще не сделанные задания.
                 strcpy(aquests[acount], name);
                 acount++;
             } else if (flcomp == 2) {
+                // Запомнить выполненные задания.
                 strcpy(dquests[dcount], name);
                 dcount++;
             } else if (flcomp == 1) {
+                // Запомнить текущие задания.
                 strcpy(nquests[ncount], name);
                 ncount++;
             }
+        // Все равно показываем многоразовые квесты, даже если они выполнены.
         } else if (quests->multi) {
+            // Запомнить многократные задания.
             strcpy(mquests[mcount], name);
             mcount++;
         }
     }
 
+    // Запомнить меню возможных действий рядом с мобом.
     for (qscript = victim->qscripts; qscript; qscript = qscript->next) {
         char *name = qscript->text;
 
@@ -75,6 +95,7 @@ int go_show_quests(struct char_data *ch, struct char_data *victim)
         qcount++;
     }
 
+    // Вывод списка заданий и меню на экран.
     *buf = '\0';
     int l = 1;
 
@@ -123,7 +144,7 @@ int go_show_quests(struct char_data *ch, struct char_data *victim)
         }
     }
 
-
+    // Вывести приветствие или прощание моба.
     if (victim->welcome && l > 1) {
         char buf1[MAX_EXTEND_LENGTH];
 
@@ -154,10 +175,7 @@ void go_show_quest(struct char_data *ch, struct char_data *victim, int pos, int 
 
     if (ch->player.select_mode <= -1) {
         for (quests = victim->quests; quests; quests = quests->next) {
-            char qbuf[16];
-
-            sprintf(qbuf, "%d%d", vnum, quests->number);
-            int qvnum = atoi(qbuf);
+            int qvnum = quest_vnum(vnum, quests->number);
 
             //Проверка условия
             if (!EXPR(quests->expr)->Expr(ch, victim, NULL)
@@ -343,6 +361,25 @@ ACMD(do_listen)
         act("$N ничего Вам не рассказал$G.", FALSE, ch, 0, victim, TO_CHAR);
 }
 
+/**
+ * Добавляет игроку ch задание под номером number, полученное от моба с внумом vnum.
+ * Возвращает false при неудаче, true если квест добавлен.
+ */
+int add_quest(struct char_data *ch, int vnum, int number)
+{
+    int rnum = real_mobile(vnum);
+
+    if (rnum == -1)
+        return 0;
+
+    struct char_data *victim = mob_proto + rnum;
+    return add_quest(ch, victim, number);
+}
+
+/**
+ * Добавляет игроку ch задание под номером number, полученное от моба victim.
+ * Возвращает false при неудаче, true если квест добавлен.
+ */
 int add_quest(struct char_data *ch, struct char_data *victim, int number)
 {
     struct mob_quest_data *quests = NULL;
@@ -356,9 +393,11 @@ int add_quest(struct char_data *ch, struct char_data *victim, int number)
         return (0);
 
     for (quests = victim->quests; quests; quests = quests->next) {
+        // Проверяем, доступно ли это задание в принципе.
         if (!EXPR(quests->expr)->Expr(ch, victim, NULL))
             continue;
         i++;
+        // Задание найдено среди списка квестов этого квестора.
         if (i == number) {
             //send_to_charf(ch,"Добавляю задание с номером %d\r\n",quests->number);
             //CREATE(q,struct quest_list_data,1);
@@ -411,15 +450,13 @@ int add_quest(struct char_data *ch, struct char_data *victim, int number)
 int get_current_quest(struct char_data *ch, int qvnumber)
 {
     struct quest_list_data *q;
-    char qbuf[16];
     int qvnum = 0, i;
 
     for (i = 0; i < MAX_QUESTS; i++) {
         q = &ch->quest_list[i];
         if (!q->mob_vnum && !q->number)
             continue;
-        sprintf(qbuf, "%d%d", q->mob_vnum, q->number);
-        qvnum = atoi(qbuf);
+        qvnum = quest_vnum(q->mob_vnum, q->number);
         if (qvnum == qvnumber) {
             if (q->complite)
                 return (2);
@@ -643,11 +680,8 @@ int get_obj_quest(struct char_data *ch, int number, int mob_vnum, int vnum, int 
 {
     struct quest_list_data *qlist;
     int i, j;
-    char qbuf[16];
 
-    sprintf(qbuf, "%d%d", mob_vnum, number);
-    int qvnum = atoi(qbuf);
-
+    int qvnum = quest_vnum(mob_vnum, number);
 
     if (get_quested(ch, qvnum) && multi) {
         int rnum = real_mobile(mob_vnum);
@@ -712,6 +746,12 @@ const char *get_var_quest(struct char_data *ch, int number, int vnum, const char
     return (NULL);
 }
 
+/**
+ * Проверка состояния квеста по номеру number, взятого у моба vnum:
+ * 0 - не брали квест
+ * 1 - квест взят, но еще не закончен
+ * 2 - квест выполнен
+ */
 int check_quest(struct char_data *ch, int vnum, int number)
 {
     struct quest_list_data *qlist;
@@ -731,6 +771,13 @@ int check_quest(struct char_data *ch, int vnum, int number)
     return (FALSE);
 }
 
+/**
+ * Проверка состояния квеста с псевдономером qrnum, полученным конкатенацией
+ * vnum-а квестового моба и номера квеста у этого моба.
+ * 0 - не брали квест
+ * 1 - квест взят, но еще не закончен
+ * 2 - квест выполнен
+ */
 int check_quest(struct char_data *ch, int qrnum)
 {
     struct quest_list_data *qlist;
@@ -740,10 +787,8 @@ int check_quest(struct char_data *ch, int qrnum)
         qlist = &ch->quest_list[j];
         if (!qlist->mob_vnum && !qlist->number)
             continue;
-        char qbuf[16];
 
-        sprintf(qbuf, "%d%d", qlist->mob_vnum, qlist->number);
-        int qvnum = atoi(qbuf);
+        int qvnum = quest_vnum(qlist->mob_vnum, qlist->number);
 
         if (qrnum == qvnum) {
             if (qlist->complite)
@@ -1057,7 +1102,6 @@ void go_complite_quest(struct char_data *ch, int vnum, int number)
 {
     struct mob_quest_data *quests = NULL;
     struct char_data *victim = NULL;
-    char qbuf[16];
     int rnum = -1, j, scrnum = 0;
 
     WAIT_STATE(ch, PULSE_VIOLENCE);
@@ -1081,8 +1125,7 @@ void go_complite_quest(struct char_data *ch, int vnum, int number)
             scrnum = quests->done;
     }
 
-    sprintf(qbuf, "%d%d", vnum, number);
-    int qvnum = atoi(qbuf);
+    int qvnum = quest_vnum(vnum, number); 
 
     if (!get_quested(ch, qvnum)) {
         set_quested(ch, qvnum);
@@ -1094,6 +1137,18 @@ void go_complite_quest(struct char_data *ch, int vnum, int number)
 
 }
 
+/**
+ * Запомнить, что персонаж выполнил квест number у моба vnum.
+ */
+void set_quested(struct char_data *ch, int vnum, int number)
+{
+    int qvnum = quest_vnum(vnum, number); 
+    set_quested(ch, qvnum);
+}
+
+/**
+ * Запомнить, что персонаж выполнил квест с виртуальным номером quest.
+ */
 void set_quested(struct char_data *ch, int quest)
 {
     int i;
@@ -1113,6 +1168,18 @@ void set_quested(struct char_data *ch, int quest)
     *(ch->Questing.quests + ch->Questing.count++) = quest;
 }
 
+/**
+ * Вернуть true, если персонаж выполнил квест number у моба vnum. 
+ */
+int get_quested(struct char_data *ch, int vnum, int number)
+{
+    int qvnum = quest_vnum(vnum, number); 
+    return get_quested(ch, qvnum);
+}
+
+/**
+ * Вернуть true, если персонаж выполнил квест с виртуальным номером quest.
+ */
 int get_quested(struct char_data *ch, int quest)
 {
     int i;

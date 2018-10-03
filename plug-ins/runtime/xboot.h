@@ -67,6 +67,7 @@ void save_char_xobj(struct char_data *ch);
 int get_current_quest(struct char_data *ch, int qvnumber);
 void go_show_quest(struct char_data *ch, struct char_data *victim, int pos, int number);
 int go_show_quests(struct char_data *ch, struct char_data *victim);
+int add_quest(struct char_data *ch, int vnum, int number);
 int add_quest(struct char_data *ch, struct char_data *victim, int number);
 void del_quest(struct char_data *ch, int mob_vnum, int number);
 void set_mob_quest(struct char_data *ch, int vnum);
@@ -84,8 +85,10 @@ int check_quest(struct char_data *ch, int qrnum);
 void check_quest_complite(struct char_data *ch, int vnum, int number);
 int check_mutli_quest(struct char_data *ch, struct char_data *victim, int vnum, int number);
 void go_complite_quest(struct char_data *ch, int vnum, int number);
+void set_quested(struct char_data *ch, int vnum, int number);
 void set_quested(struct char_data *ch, int quest);
 int get_quested(struct char_data *ch, int quest);
+int get_quested(struct char_data *ch, int vnum, int number);
 
 void load_quests(struct char_data *ch);
 void save_quests(struct char_data *ch);
