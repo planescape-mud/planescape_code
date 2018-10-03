@@ -80,7 +80,7 @@ NMI_GET( ObjectWrapper, online, "" )
     return Register( target != NULL );
 }
 
-NMI_GET( ObjectWrapper, dead, "" )
+NMI_GET( ObjectWrapper, dead, "true если предмет полностью уничтожен" )
 {
     return Register( zombie.getValue() );
 }
@@ -100,6 +100,12 @@ NMI_GET( ObjectWrapper, description, "описание предмета на полу")
     return Register( target->description );
 }
 
+NMI_GET( ObjectWrapper, count, "количество предметов в мире с этим прототипом")
+{
+    checkTarget( );
+    return Register(obj_index[target->item_number].number);
+}
+
 /*
  * Methods
  */
@@ -116,7 +122,7 @@ static void obj_from_anywhere( struct obj_data *obj )
         obj_from_obj(obj);
 }
 
-NMI_INVOKE( ObjectWrapper, obj_to_char , "дать предмет в руки чару, переданному в параметрах")
+NMI_INVOKE( ObjectWrapper, obj_to_char , "(ch) положить предмет в инвентарь персонажу ch")
 {
     CharacterWrapper *chWrap;
 
@@ -131,7 +137,7 @@ NMI_INVOKE( ObjectWrapper, obj_to_char , "дать предмет в руки чару, переданному 
     return Register( );
 }
 
-NMI_INVOKE( ObjectWrapper, obj_to_room, "положить предмет в комнату, переданную в параметрах")
+NMI_INVOKE( ObjectWrapper, obj_to_room, "(room) положить предмет в комнату room")
 {
     RoomWrapper *roomWrap;
 
@@ -147,7 +153,7 @@ NMI_INVOKE( ObjectWrapper, obj_to_room, "положить предмет в комнату, переданную 
     return Register( );
 }
 
-NMI_INVOKE( ObjectWrapper, obj_to_obj, "положить предмет в контейнер, переданный в параметрах")
+NMI_INVOKE( ObjectWrapper, obj_to_obj, "(obj) положить предмет в контейнер obj")
 {
     ObjectWrapper *objWrap;
 
@@ -162,7 +168,7 @@ NMI_INVOKE( ObjectWrapper, obj_to_obj, "положить предмет в контейнер, переданный
     return Register( );
 }
 
-NMI_INVOKE( ObjectWrapper, create, "создать предмет с этим прототипом")
+NMI_INVOKE( ObjectWrapper, create, "() создать предмет с этим прототипом")
 {
     checkTarget();
     
@@ -170,21 +176,21 @@ NMI_INVOKE( ObjectWrapper, create, "создать предмет с этим прототипом")
     return wrap(obj);
 }
 
-NMI_INVOKE( ObjectWrapper, api, "печатает этот API" )
+NMI_INVOKE( ObjectWrapper, api, "() печатает этот API" )
 {   
     ostringstream buf;
     Scripting::traitsAPI<ObjectWrapper>( buf );
     return Register( buf.str( ) );
 }
 
-NMI_INVOKE( ObjectWrapper, rtapi, "печатает все поля и методы, установленные в runtime" )
+NMI_INVOKE( ObjectWrapper, rtapi, "() печатает все поля и методы, установленные в runtime" )
 {
     ostringstream buf;
     traitsAPI( buf );
     return Register( buf.str( ) );
 }
 
-NMI_INVOKE( ObjectWrapper, clear, "очистка всех runtime полей" )
+NMI_INVOKE( ObjectWrapper, clear, "() очистка всех runtime полей" )
 {
     guts.clear( );
     self->changed();

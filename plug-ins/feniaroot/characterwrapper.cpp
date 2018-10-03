@@ -252,21 +252,21 @@ NMI_GET( CharacterWrapper, exp, "опыт персонажа" )
 /*
  * METHODS common for players, mobile instances and prototypes
  */
-NMI_INVOKE( CharacterWrapper, api, "печатает этот API" )
+NMI_INVOKE( CharacterWrapper, api, "() печатает этот API" )
 {   
     ostringstream buf;
     Scripting::traitsAPI<CharacterWrapper>( buf );
     return Register( buf.str( ) );
 }
 
-NMI_INVOKE( CharacterWrapper, rtapi, "печатает все поля и методы, установленные в runtime" )
+NMI_INVOKE( CharacterWrapper, rtapi, "() печатает все поля и методы, установленные в runtime" )
 {
     ostringstream buf;
     traitsAPI( buf );
     return Register( buf.str( ) );
 }
 
-NMI_INVOKE( CharacterWrapper, clear, "очистка всех runtime полей" )
+NMI_INVOKE( CharacterWrapper, clear, "() очистка всех runtime полей" )
 {
     guts.clear( );
     self->changed();
@@ -277,7 +277,7 @@ NMI_INVOKE( CharacterWrapper, clear, "очистка всех runtime полей" )
 /*
  * METHODS common for players and mobile instances
  */
-NMI_INVOKE( CharacterWrapper, ptc, "print to char, печатает строку" )
+NMI_INVOKE( CharacterWrapper, ptc, "(строка) выводит строку персонажу" )
 {
     METHOD_INST_ONLY
     send_to_char(args2string(args).c_str(), target);
@@ -305,21 +305,21 @@ static void act_generic(struct char_data *target, const RegisterList &args, int 
     act(fmt.c_str(), 0, target, obj, ch, type);
 }
 
-NMI_INVOKE( CharacterWrapper, act_char, "печатает этому чару строку в формате act(...,TO_CHAR)" )
+NMI_INVOKE( CharacterWrapper, act_char, "(формат, аргументы) печатает персонажу строку в формате act(...,TO_CHAR)" )
 {
     METHOD_INST_ONLY
     act_generic(target, args, TO_CHAR);
     return Register();
 }
 
-NMI_INVOKE( CharacterWrapper, act_room, "печатает в комнату чара строку в формате act(...,TO_ROOM)" )
+NMI_INVOKE( CharacterWrapper, act_room, "(формат, аргументы) печатает в комнату персонажа строку в формате act(...,TO_ROOM)" )
 {
     METHOD_INST_ONLY
     act_generic(target, args, TO_ROOM);
     return Register();
 }
 
-NMI_INVOKE( CharacterWrapper, interpret, "интерпретирует строку, как будто чар ее набрал сам" )
+NMI_INVOKE( CharacterWrapper, interpret, "(строка) интерпретирует строку, как будто персонаж ее набрал сам" )
 {
     METHOD_INST_ONLY
     char buf[MAX_STRING_LENGTH];
@@ -328,19 +328,26 @@ NMI_INVOKE( CharacterWrapper, interpret, "интерпретирует строку, как будто чар е
     return Register();
 }
 
-NMI_INVOKE( CharacterWrapper, can_see_char, "видит ли чара указанного в параметрах" )
+NMI_INVOKE( CharacterWrapper, extract, "() полностью удалит моба" )
+{
+    METHOD_NPC_ONLY
+    extract_char(target, true);
+    return Register();
+}
+
+NMI_INVOKE( CharacterWrapper, can_see_char, "(victim) видит ли персонажа victim" )
 {
     METHOD_INST_ONLY
     return CAN_SEE(target, arg2character(get_unique_arg(args)));
 }
 
-NMI_INVOKE( CharacterWrapper, can_see_obj, "видит ли предмет указанный в параметрах" )
+NMI_INVOKE( CharacterWrapper, can_see_obj, "(obj) видит ли предмет obj" )
 {
     METHOD_INST_ONLY
     return CAN_SEE_OBJ(target, arg2item(get_unique_arg(args)));
 }
 
-NMI_INVOKE( CharacterWrapper, char_room, "получить видимого нам чара в нашей комнате по имени" )
+NMI_INVOKE( CharacterWrapper, char_room, "(строка) получить видимого нам чара в нашей комнате по имени" )
 {
     METHOD_INST_ONLY
     char buf[MAX_STRING_LENGTH];
@@ -348,7 +355,7 @@ NMI_INVOKE( CharacterWrapper, char_room, "получить видимого нам чара в нашей ком
     return wrap( get_char_room_vis( target, buf ) ); 
 }
 
-NMI_INVOKE( CharacterWrapper, obj_carry, "получить видимый нам предмет в инвентаре по имени" )
+NMI_INVOKE( CharacterWrapper, obj_carry, "(строка) получить видимый нам предмет в инвентаре по имени" )
 {
     METHOD_INST_ONLY
     char buf[MAX_STRING_LENGTH];
@@ -356,7 +363,7 @@ NMI_INVOKE( CharacterWrapper, obj_carry, "получить видимый нам предмет в инвента
     return wrap( get_obj_in_list_vis( target, buf, target->carrying ) ); 
 }
 
-NMI_INVOKE( CharacterWrapper, teleport, "поместит чара в указанную комнату" )
+NMI_INVOKE( CharacterWrapper, teleport, "(комната или номер) поместит чара в указанную комнату" )
 {
     METHOD_INST_ONLY
     const Register &reg = get_unique_arg(args);
@@ -381,7 +388,7 @@ NMI_INVOKE( CharacterWrapper, teleport, "поместит чара в указанную комнату" )
 /*
  * METHODS for mobile-prototypes only
  */
-NMI_INVOKE( CharacterWrapper, create, "создает новый экземпляр моба из этого прототипа и помещает в Гостиную" )
+NMI_INVOKE( CharacterWrapper, create, "() создает новый экземпляр моба из этого прототипа и помещает в Гостиную" )
 {
     METHOD_PROTO_ONLY
     struct char_data *mob = read_mobile(target->nr, REAL);
@@ -408,7 +415,7 @@ NMI_INVOKE( CharacterWrapper, quest_get, "(vnum, number) выполнил ли игрок квест
     METHOD_PC_ONLY
     int vnum = arg_one(args).toNumber();
     int number = arg_two(args).toNumber();
-    return Register(get_quested(target, vnum, number));	
+    return Register(get_quested(target, vnum, number));    
 }
 
 NMI_INVOKE( CharacterWrapper, quest_set, "(vnum, number) пометить, что игрок выполнил квест number у квестора vnum" )
@@ -417,7 +424,7 @@ NMI_INVOKE( CharacterWrapper, quest_set, "(vnum, number) пометить, что игрок вып
     int vnum = arg_one(args).toNumber();
     int number = arg_two(args).toNumber();
     set_quested(target, vnum, number);
-    return Register();	
+    return Register();    
 }
 
 NMI_INVOKE( CharacterWrapper, quest_check, "(vnum, number) состояние квеста number у квестора vnum: 0 не брали, 1 в процессе, 2 закончен" )
@@ -442,6 +449,6 @@ NMI_INVOKE( CharacterWrapper, quest_del, "(vnum, number) удалить у игрока квест 
     int vnum = arg_one(args).toNumber();
     int number = arg_two(args).toNumber();
     del_quest(target, vnum, number);
-    return Register();	
+    return Register();    
 }
 
