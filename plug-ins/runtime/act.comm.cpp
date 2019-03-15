@@ -144,7 +144,7 @@ ACMD(do_languages)
 
 void garble_text(char *string, int percent, int lang)
 {
-    char letters[33] = "";
+    char letters[50] = "";
     int i, s = 0, need = 1;
 
 
