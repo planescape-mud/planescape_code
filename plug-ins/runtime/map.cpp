@@ -635,7 +635,7 @@ void draw_room(struct char_data *ch,  room_data *room, int cur_depth, int y, int
 			if (i != UP && i != DOWN
 				&& cur_depth < MAX_DEPTH_ROOMS
 				&& (!DOOR_FLAGGED(room->dir_option[i], EXIT_CLOSED) || IS_IMMORTAL(ch))
-				&& next_room->zone == world[ch->in_room].zone
+				//&& next_room->zone == world[ch->in_room].zone
 				&& mode_allow(ch, cur_depth))
 			{
 				draw_room(ch, next_room, cur_depth + 1, next_y, next_x);
@@ -756,7 +756,7 @@ void print_map(struct char_data *ch, struct char_data *imm)
 	for (int i = start_line; i < end_line; ++i)
 	{
 		out += ": ";
-		for (int k = 0; k < MAX_LENGHT; ++k)
+		for (int k = 10; k < MAX_LENGHT; ++k)
 		{
 			if (screen[i][k] <= -1)
 			{
