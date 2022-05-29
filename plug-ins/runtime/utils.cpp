@@ -4068,8 +4068,8 @@ void ShowMessage(struct char_data *ch,
 {
     char *rstring(int dam, const char *str, int hTyp, const char *wear_mess, const char *wear_mess2,
                   const char *wname);
-    char *to_char = '\0', *to_vict = '\0', *to_room = '\0', *buf = '\0', tmp[256], tmp2[256];
-    char *m_to_char = '\0', *m_to_vict = '\0', *m_to_room = '\0', wname[256];
+    char *to_char = 0, *to_vict = 0, *to_room = 0, *buf = 0, tmp[256], tmp2[256]; // prool
+    char *m_to_char = 0, *m_to_vict = 0, *m_to_room = 0, wname[256]; // prool
     int mdam, atype;
     struct char_data *tch;
 

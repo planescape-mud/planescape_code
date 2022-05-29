@@ -1011,8 +1011,8 @@ void boot_obj(void)
         numadd = obj->GetItem(OBJ_COMMAND)->GetNumberItem();
         for (j = 0; j < numadd; j++) {
             int obj_vnum = 0, mob_vnum = 0, extract = 0, lroom = 0, linv = 0;
-            char *arg = '\0', *err = '\0', *active = '\0', *active_room = '\0',
-                *to_char = '\0', *to_room = '\0', *error_char = '\0', *error_room = '\0';
+            char *arg = 0, *err = 0, *active = 0, *active_room = 0, // prool
+                *to_char = 0, *to_room = 0, *error_char = 0, *error_room = 0;
 
             CItem *command = obj->GetItem(OBJ_COMMAND)->GetItem(j);
 

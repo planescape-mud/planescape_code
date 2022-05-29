@@ -779,7 +779,7 @@ const char *list_one_char(struct char_data *i, struct char_data *ch, int skill_m
         //GET_POS(i) == GET_DEFAULT_POS(i) &&
         //IN_ROOM(ch) == IN_ROOM(i) &&
         !AFF_FLAGGED(i, AFF_CHARM) && !IS_MOUNT(i)) {   // Монстр по дефолту
-        const char *mess = '\0';
+        const char *mess = 0; // prool
 
         point = 1;
 
@@ -809,7 +809,7 @@ const char *list_one_char(struct char_data *i, struct char_data *ch, int skill_m
             //GET_POS(i) == GET_DEFAULT_POS(i) &&
             //IN_ROOM(ch) == IN_ROOM(i) &&
             AFF_FLAGGED(i, AFF_CHARM) && !IS_MOUNT(i)) {
-        const char *mess = '\0';
+        const char *mess = 0; // prool
 
         point = 1;
 
@@ -872,7 +872,7 @@ const char *list_one_char(struct char_data *i, struct char_data *ch, int skill_m
         //strcat(buf," ");
 
         if (!FIGHTING(i)) {
-            const char *mess = '\0';
+            const char *mess = 0; // prool
 
             if ((mess = get_line_event(i)))
                 sprintf(buf + strlen(buf), " %s", mess);
@@ -3224,7 +3224,7 @@ ACMD(do_score)
         send_to_char(buf, ch);
     }
 
-    const char *mess = '\0';
+    const char *mess = 0; // prool
 
     if ((mess = get_status_event(ch)))
         send_to_charf(ch, "%s.\r\n", mess);

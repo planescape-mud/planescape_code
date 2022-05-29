@@ -7,6 +7,7 @@
 *  Copyright (C) 1993, 94 by the Trustees of the Johns Hopkins University *
 *  CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.               *
 ************************************************************************ */
+
 #include "sysdep.h"
 #include "profiler.h"
 
@@ -56,6 +57,7 @@ void index_boot(int mode);
 int check_object(struct obj_data *);
 void build_player_index(void);
 int is_empty(zone_rnum zone_nr);
+int is_empty_(zone_rnum zone_nr); // prool
 void boot_world(void);
 int count_social_records(FILE * fl, int *messages, int *keywords);
 void asciiflag_conv(const char *flag, void *value);
@@ -1087,7 +1089,7 @@ void zone_update(void)
     /* this code is executed every 10 seconds (i.e. PULSE_ZONE) */
     for (update_u = reset_q.head; update_u; update_u = update_u->next)
         if (zone_table[update_u->zone_to_reset].reset_mode == 2 ||
-            is_empty(update_u->zone_to_reset)) {
+            is_empty_(update_u->zone_to_reset)) { // prool
             new_reset_zone(update_u->zone_to_reset);
             sprintf(buf, "Сброс зоны: %s", zone_table[update_u->zone_to_reset].name);
             log(buf);
@@ -1719,7 +1721,7 @@ int get_zone_rooms(int zone_nr, int *start, int *stop)
 }
 
 /* for use in reset_zone; return TRUE if zone 'nr' is free of PC's  */
-int is_empty(zone_rnum zone_nr)
+int is_empty_(zone_rnum zone_nr)
 {
     struct descriptor_data *i;
     int rnum_start, rnum_stop;
@@ -3156,8 +3158,11 @@ void new_save_char(struct char_data *ch, room_rnum load_room)
     fprintf(saved, "Divr: %s\n", ch->divr);
 
     fprintf(saved, "Hlvl:\n");
-    for (i = 0; i <= 60; i++)
+
+    for (i = 0; i <= LVL_MAX /*60*/; i++) { // prool: dirty fix
         fprintf(saved, "%d %d\n", i, GET_HLEVEL(ch, i));
+	}
+
     fprintf(saved, "61 31\n");
 
     /* Записываем мультиклассы */
