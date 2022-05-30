@@ -22,10 +22,10 @@ public:
 
 #define BASE_VOID_CALL( base, id, fmt... ) \
         if (base) { \
-            static Scripting::IdRef onId( "on"id ); \
+            static Scripting::IdRef onId( "on" id ); \
             base->call( onId, fmt ); \
             \
-            static Scripting::IdRef postId( "post"id ); \
+            static Scripting::IdRef postId( "post" id ); \
             base->postpone( postId, fmt ); \
         } 
 
@@ -42,10 +42,10 @@ public:
 #define BASE_BOOL_CALL( base, id, fmt... ) \
         if (base) { \
             bool rc; \
-            static Scripting::IdRef onId( "on"id ); \
+            static Scripting::IdRef onId( "on" id ); \
             rc = base->call( onId, fmt ); \
             \
-            static Scripting::IdRef postId( "post"id ); \
+            static Scripting::IdRef postId( "post" id ); \
             base->postpone( postId, fmt ); \
             \
             if (rc) return true; \

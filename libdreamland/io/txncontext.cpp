@@ -19,6 +19,8 @@
 
 #include <sstream>
 
+#include <unistd.h> // prool
+
 using namespace std;
 
 struct DbEnv {

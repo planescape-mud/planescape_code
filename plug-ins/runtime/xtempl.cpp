@@ -96,25 +96,25 @@ void boot_sets(void)
             if (varnt->GetItem(S_VAR_SCORE)->GetString())
                 varz.score = str_dup(varnt->GetItem(S_VAR_SCORE)->GetString());
             else
-                varz.score = '\0';
+                varz.score = 0;
 
             if (varnt->GetItem(S_VAR_SCHAR)->GetString())
                 varz.start_to_char = str_dup(varnt->GetItem(S_VAR_SCHAR)->GetString());
             else
-                varz.start_to_char = '\0';
+                varz.start_to_char = 0;
             if (varnt->GetItem(S_VAR_SROOM)->GetString())
                 varz.start_to_room = str_dup(varnt->GetItem(S_VAR_SROOM)->GetString());
             else
-                varz.start_to_room = '\0';
+                varz.start_to_room = 0;
 
             if (varnt->GetItem(S_VAR_ECHAR)->GetString())
                 varz.stop_to_char = str_dup(varnt->GetItem(S_VAR_ECHAR)->GetString());
             else
-                varz.stop_to_char = '\0';
+                varz.stop_to_char = 0;
             if (varnt->GetItem(S_VAR_EROOM)->GetString())
                 varz.stop_to_room = str_dup(varnt->GetItem(S_VAR_EROOM)->GetString());
             else
-                varz.stop_to_room = '\0';
+                varz.stop_to_room = 0;
 
             if (varnt->GetItem(S_VAR_AFFECT)->GetString())
                 asciiflag_conv((char *) varnt->GetItem(S_VAR_AFFECT)->GetString(), &varz.affects);

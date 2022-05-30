@@ -105,14 +105,14 @@ char *find_nar(char *nar, struct social_messg *action)
         if (action->nars)
             return (action->nars);
         else
-            return '\0';
+            return 0; // prool
     } else {
         for (j = 0; j < top_of_adverb; j++)
             if (!strn_cmp(nar, adverb_list[j].adverb, len))
                 return adverb_list[j].adverb;
     }
 
-    return '\0';
+    return 0; // prool
 }
 
 int find_nar1(char *nar, struct social_messg *action)
