@@ -83,7 +83,8 @@ using namespace std;
 #define KT_WIN        2
 #define KT_WINZ       3
 #define KT_WINZ6      4
-#define KT_LAST       5
+#define KT_UTF8       5
+#define KT_LAST       6
 #define KT_SELECTMENU 255
 
 

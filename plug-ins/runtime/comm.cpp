@@ -23,6 +23,12 @@
  * if it is a client or server problem.
  */
 
+#define HAVE_ICONV // prool: for UTF-8 codetable
+
+#ifdef HAVE_ICONV
+#include <iconv.h>
+#endif
+
 #include "sysdep.h"
 #include "profiler.h"
 
@@ -82,6 +88,8 @@ void zlib_free(void *opaque, void *address);
 int mccp_start(struct descriptor_data *t, int ver);
 int mccp_end(struct descriptor_data *t, int ver);
 
+void koi_to_utf8(char *str_i, char *str_o);
+void utf8_to_koi(char *str_i, char *str_o);
 
 #ifdef __CXREF__
 #undef FD_ZERO
@@ -1368,8 +1376,13 @@ int new_descriptor(socket_t s)
     newd->next = descriptor_list;
     descriptor_list = newd;
 
+#ifdef HAVE_ICONV
+    SEND_TO_Q("\r\nSelect your charset:"
+              " 0.KOI-8" " 1.DOS" " 2.JMC" " 3.ZMUD" " 4.ZMUD6+" " 5.UTF-8" " :", newd);
+#else
     SEND_TO_Q("\r\nSelect your charset:"
               " 0.KOI-8" " 1.DOS" " 2.JMC" " 3.ZMUD" " 4.ZMUD6+" " :", newd);
+#endif
 
 #if defined(HAVE_ZLIB)
     //write_to_descriptor(newd->descriptor, will_sig, strlen(will_sig));
@@ -1446,11 +1459,19 @@ int process_output(struct descriptor_data *t)
         case KT_WINZ6:
             for (; *pi; *po = KtoW2(*pi), pi++, po++);
             break;
+#ifdef HAVE_ICONV
+	case KT_UTF8:
+		koi_to_utf8(pi, po);
+		break;
+#endif
         default:
             for (; *pi; *po = *pi, pi++, po++);
             break;
     }
-    *po = '\0';
+    if (t->keytable != KT_UTF8)
+	{
+		*po = '\0';
+	}
     for (c = 0; o[c]; c++) {
         i[c] = o[c];
     }
@@ -1906,6 +1927,9 @@ int process_input(struct descriptor_data *t)
                     case 0:
                         *(write_point++) = *ptr;
                         break;
+		    case KT_UTF8:
+			*(write_point++) = *ptr;
+			break;
                     case KT_ALT:
                         *(write_point++) = AtoK(*ptr);
                         break;
@@ -1924,6 +1948,26 @@ int process_input(struct descriptor_data *t)
         }
 
         *write_point = '\0';
+
+#ifdef HAVE_ICONV
+		if (t->keytable == KT_UTF8)
+		{
+			int i;
+			char utf8_tmp[MAX_SOCK_BUF * 2 * 3];
+			size_t len_i, len_o;
+
+			len_i = strlen(tmp);
+
+			for (i = 0; i < MAX_SOCK_BUF * 2 * 3; i++)
+			{
+				utf8_tmp[i] = 0;
+			}
+			utf8_to_koi(tmp, utf8_tmp);
+			len_o = strlen(utf8_tmp);
+			strncpy(tmp, utf8_tmp, MAX_INPUT_LENGTH - 1);
+			space_left = space_left + len_i - len_o;
+		}
+#endif
 
 
         if ((space_left <= 0) && (ptr < nl_pos)) {
@@ -3386,3 +3430,73 @@ void warn_copyover()
         lastmessage_c = time(NULL);
     }
 }
+
+#ifdef HAVE_ICONV
+// UTF-8 coders by prool
+void koi_to_utf8(char *str_i, char *str_o)
+{
+	iconv_t cd;
+	size_t len_i, len_o = MAX_SOCK_BUF * 6;
+	size_t i;
+	char *str_i_orig=str_i;
+	char *str_o_orig=str_o;
+
+	if ((cd = iconv_open("UTF-8","KOI8-RU")) == (iconv_t) - 1)
+	{
+		printf("koi_to_utf8: iconv_open error\n");
+		*str_o = 0;
+		return;
+	}
+	len_i = strlen(str_i);
+	if ((i = iconv(cd, &str_i, &len_i, &str_o, &len_o)) == (size_t) - 1)
+	{
+		printf("koi_to_utf8: iconv error ");
+		printf("'%s' [", str_i_orig);
+		while (*str_i_orig) printf("%02X ", *str_i_orig++);
+		printf("] -> '%s' [", str_o_orig);
+		while (*str_o_orig) printf("%02X ", *str_o_orig++);
+		printf("]\n");
+
+		*str_o = 0;
+		return;
+	}
+	*str_o = 0;
+	if (iconv_close(cd) == -1)
+	{
+		printf("koi_to_utf8: iconv_close error\n");
+		return;
+	}
+}
+
+void utf8_to_koi(char *str_i, char *str_o)
+{
+	iconv_t cd;
+	size_t len_i, len_o = MAX_SOCK_BUF * 6;
+	size_t i;
+	char *str_i_orig=str_i;
+	char *str_o_orig=str_o;
+
+	if ((cd = iconv_open("KOI8-RU", "UTF-8")) == (iconv_t) - 1)
+	{
+		printf("utf8_to_koi: iconv_open error\n");
+		return;
+	}
+	len_i = strlen(str_i);
+	if ((i=iconv(cd, &str_i, &len_i, &str_o, &len_o)) == (size_t) - 1)
+	{
+		printf("utf8_to_koi: iconv error ");
+		printf("'%s' [", str_i_orig);
+		while (*str_i_orig) printf("%02X ", *str_i_orig++);
+		printf("] -> '%s' [", str_o_orig);
+		while (*str_o_orig) printf("%02X ", *str_o_orig++);
+		printf("]\n");
+		// return;
+	}
+	*str_o = 0;
+	if (iconv_close(cd) == -1)
+	{
+		printf("utf8_to_koi: iconv_close error\n");
+		return;
+	}
+}
+#endif // HAVE_ICONV

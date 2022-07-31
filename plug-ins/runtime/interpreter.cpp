@@ -1321,6 +1321,7 @@ void nanny(struct descriptor_data *d, char *arg)
         case CON_GET_KEYTABLE:{
                 if (strlen(arg) > 0)
                     arg[0] = arg[strlen(arg) - 1];
+		//printf("prool debug: *arg = %c\n", *arg);
                 if (!*arg || *arg < '0' || *arg >= '0' + KT_LAST) {
                     SEND_TO_Q(MSG_UNKNOW_KEY, d);
                     return;
